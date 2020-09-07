@@ -1,0 +1,79 @@
+﻿<Window x:Class="WpfApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="300" Width="600">
+    <!--<Window.Resources>
+        <ControlTemplate TargetType="Button" x:Key="ButtonTemplate">
+            --><!--定义视觉树--><!--
+            <Grid>
+                <Ellipse Name="faceEllipse" Width="{TemplateBinding Button.Width}" Height="{TemplateBinding Control.Height}"  Fill="{TemplateBinding Button.Background}"/>
+                <TextBlock Name="txtBlock" Margin="{TemplateBinding Button.Padding}" VerticalAlignment="Center"  HorizontalAlignment="Center"  Text="{TemplateBinding Button.Content}" />
+            </Grid>
+            --><!--定义视觉树_end-->
+            <!--定义触发器--><!--
+            <ControlTemplate.Triggers>
+                <Trigger  Property="Button.IsMouseOver"  Value="True">
+                    <Setter Property="Button.Foreground" Value="Red" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+            --><!--定义触发器_End--><!--
+        </ControlTemplate>
+    </Window.Resources>-->
+    <Window.Resources>
+        <ControlTemplate TargetType="Button" x:Key="ButtonTemplate">
+            <!--定义视觉树-->
+            <Grid>
+                <Ellipse Name="faceEllipse" Width="{TemplateBinding Button.Width}" Height="{TemplateBinding Control.Height}"  Fill="{TemplateBinding Button.Background}"/>
+                <TextBlock Name="txtBlock" Margin="{TemplateBinding Button.Padding}" VerticalAlignment="Center"  HorizontalAlignment="Center"  Text="{TemplateBinding Button.Content}" />
+            </Grid>
+            <!--定义视觉树_end-->
+
+            <!--定义动画资源-->
+            <ControlTemplate.Resources>
+                <Storyboard x:Key="MouseClickButtonStoryboard">
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="faceEllipse" Storyboard.TargetProperty="Width" BeginTime="00:00:00">
+                        <SplineDoubleKeyFrame KeyTime="00:00:00" Value="50"/>
+                        <SplineDoubleKeyFrame KeyTime="00:00:00.3" Value="100"/>
+                    </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+            </ControlTemplate.Resources>
+            <!--定义动画资源_end-->
+            <!--定义触发器-->
+            <ControlTemplate.Triggers>
+                <Trigger  Property="Button.IsMouseOver"  Value="True">
+                    <Setter Property="Button.Foreground" Value="Red" />
+                </Trigger>
+                <EventTrigger RoutedEvent="Mouse.MouseDown" SourceName="faceEllipse">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource MouseClickButtonStoryboard}"/>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="Mouse.MouseDown" SourceName="txtBlock">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource MouseClickButtonStoryboard}"/>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </ControlTemplate.Triggers>
+            <!--定义触发器_End-->
+        </ControlTemplate>
+    </Window.Resources>
+    <Grid ShowGridLines="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.2*"/>
+            <ColumnDefinition Width="0.6*"/>
+            <ColumnDefinition Width="0.2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.3*"/>
+            <RowDefinition Height="0.3*"/>
+            <RowDefinition Height="0.4*"/>
+        </Grid.RowDefinitions>
+        <Button Content="test btn1" Grid.Column="0" Width="Auto" Height="Auto" Margin="10" Grid.ColumnSpan="1" Grid.Row="0" Grid.RowSpan="1"  />
+        <Button Content="test btn2" Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="1" Grid.RowSpan="1"  Template="{StaticResource ButtonTemplate}" />
+        <Button Content="test btn2" Grid.Column="2" Grid.ColumnSpan="1" Grid.Row="2" Grid.RowSpan="1"  Template="{StaticResource ButtonTemplate}" />
+    </Grid>
+</Window>
