@@ -46,17 +46,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Others\GenericTest.cs" />
+    <Compile Include="Others\ReflectionTest.cs" />
+    <Compile Include="Others\Singleton.cs" />
     <Compile Include="语法集合\DictionarySortDemo.cs" />
     <Compile Include="Tools\IConsoleTool.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="语法集合\FuncDemo.cs" />
+    <Compile Include="语法集合\GenericsDemo.cs" />
     <Compile Include="语法集合\ReferenceTypePassing.cs" />
+    <Compile Include="语法集合\ReflectDemo.cs" />
     <Compile Include="语法集合\SelectManyDemo.cs" />
     <Compile Include="语法集合\Switch新语法Demo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

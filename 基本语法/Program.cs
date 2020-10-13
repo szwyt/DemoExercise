@@ -8,6 +8,7 @@ namespace 基本语法
 {
     class Program
     {
+        private static string hello;
         static void Main(string[] args)
         {
             #region 字典排序Demo练习
@@ -39,10 +40,24 @@ namespace 基本语法
             #endregion
 
             #region Switch新语法Demo
+            //{
+            //    IConsoleTool consoleTool = new Switch新语法Demo();
+            //    consoleTool.ConsoleWriteLine();
+            //}
+            #endregion
+
+            #region 泛型Demo
             {
-                IConsoleTool consoleTool = new Switch新语法Demo();
+                IConsoleTool consoleTool = new GenericsDemo();
                 consoleTool.ConsoleWriteLine();
             }
+            #endregion
+
+            #region 反射
+            //{
+            //    IConsoleTool consoleTool = new ReflectDemo();
+            //    consoleTool.ConsoleWriteLine();
+            //}
             #endregion
 
             Console.ReadKey();

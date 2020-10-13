@@ -9,24 +9,28 @@ namespace 异步编程
 {
     class Program
     {
-        static void Main(string[] args)
+        static async void Main(string[] args)
         {
-            PagePaint();
+            Console.WriteLine($"MainBegin");
+            await GetIdAsync();
+            Console.WriteLine($"MainEnd");
             Console.ReadKey();
         }
 
-        public static Task GetIdAsync()
+        public async static Task GetIdAsync()
         {
-            return Task.Run(() =>
+            Console.WriteLine($"GetIdAsyncBegin:");
+            await Task.Run(() =>
               {
                   Thread.Sleep(2000);
                   Console.WriteLine($"当前线程id:{Thread.CurrentThread.ManagedThreadId.ToString()}");
               });
+            Console.WriteLine($"GetIdAsyncEnd:");
         }
-        static void PagePaint()
+        static async Task PagePaint()
         {
             Console.WriteLine("Paint Start");
-            Paint();
+            await Paint();
             Console.WriteLine("Paint End");
         }
 
@@ -37,7 +41,7 @@ namespace 异步编程
         //    Rendering("Footer");
         //}
 
-        static async void Paint()
+        static async Task Paint()
         {
             await PaintAds();
             Rendering("Header");
