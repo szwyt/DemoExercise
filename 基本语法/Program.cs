@@ -1,64 +1,93 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace 基本语法
 {
-    class Program
+    internal class Program
     {
-        private static string hello;
-        static void Main(string[] args)
+        private static readonly string hello;
+
+        private static void Main(string[] args)
         {
             #region 字典排序Demo练习
+
             //{
             //    IConsoleTool consoleTool = new DictionarySortDemo();
             //    consoleTool.ConsoleWriteLine();
             //}
-            #endregion
+
+            #endregion 字典排序Demo练习
 
             #region 引用类型当参数传递Demo
+
             //{
             //    IConsoleTool consoleTool = new ReferenceTypePassing();
             //    consoleTool.ConsoleWriteLine();
             //}
-            #endregion
+
+            #endregion 引用类型当参数传递Demo
 
             #region FuncDemo
+
             //{
             //    IConsoleTool consoleTool = new FuncDemo();
             //    consoleTool.ConsoleWriteLine();
             //}
-            #endregion
+
+            #endregion FuncDemo
 
             #region SelectMnayDemo
+
             //{
             //    IConsoleTool consoleTool = new SelectManyDemo();
             //    consoleTool.ConsoleWriteLine();
             //}
-            #endregion
+
+            #endregion SelectMnayDemo
 
             #region Switch新语法Demo
+
             //{
             //    IConsoleTool consoleTool = new Switch新语法Demo();
             //    consoleTool.ConsoleWriteLine();
             //}
-            #endregion
+
+            #endregion Switch新语法Demo
 
             #region 泛型Demo
-            {
-                IConsoleTool consoleTool = new GenericsDemo();
-                consoleTool.ConsoleWriteLine();
-            }
-            #endregion
+
+            //{
+            //    IConsoleTool consoleTool = new GenericsDemo();
+            //    consoleTool.ConsoleWriteLine();
+            //}
+
+            #endregion 泛型Demo
 
             #region 反射
+
             //{
             //    IConsoleTool consoleTool = new ReflectDemo();
             //    consoleTool.ConsoleWriteLine();
             //}
-            #endregion
+
+            #endregion 反射
+
+            #region 获取文件夹下的所有文件的文件名
+
+            //{
+            //    IConsoleTool consoleTool = new DirectoryDemo();
+            //    consoleTool.ConsoleWriteLine();
+            //}
+
+            #endregion 获取文件夹下的所有文件的文件名
+
+            #region Lambda表达式
+
+            {
+                IConsoleTool consoleTool = new LambdaDemo();
+                consoleTool.ConsoleWriteLine();
+            }
+
+            #endregion Lambda表达式
 
             Console.ReadKey();
         }

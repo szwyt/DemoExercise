@@ -2,10 +2,7 @@
 using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Protocol;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SuperSocketDemo
 {
@@ -14,8 +11,8 @@ namespace SuperSocketDemo
         public TelnetServer()
              : base(new CommandLineReceiveFilterFactory(Encoding.Default, new BasicRequestInfoParser(":", ",")))
         {
-
         }
+
         protected override bool Setup(IRootConfig rootConfig, IServerConfig config)
         {
             return base.Setup(rootConfig, config);
@@ -31,6 +28,5 @@ namespace SuperSocketDemo
         {
             base.OnStopped();
         }
-
     }
 }

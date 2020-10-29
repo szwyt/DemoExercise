@@ -1,15 +1,8 @@
 ﻿using SpeechLib;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Net;
 using System.Speech.Synthesis;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -69,7 +62,7 @@ namespace 地磅读取
 
             SpeechSynthesizer speak = new SpeechSynthesizer();
             speak.Volume = 100;//设置音量 0~100
-            speak.Rate = 1;//设置语速 
+            speak.Rate = 1;//设置语速
             //speak.SelectVoice("Microsoft Huihui Desktop");
             //speak.SelectVoice("Microsoft Kangkang-Chinese(Simplifined,PRC)");
             speak.SpeakAsync(inData.Replace(" ", "").Replace("   ", "").Replace("\r\n", ""));
@@ -92,6 +85,7 @@ namespace 地磅读取
         }
 
         private string param1 = string.Empty;
+
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             TextBox textBox = (TextBox)sender;

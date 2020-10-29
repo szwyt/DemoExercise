@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace 基本语法
 {
@@ -10,6 +6,7 @@ namespace 基本语法
     {
         //元组
         public (string, string) tuple { get; set; } = ("rock", "paper");
+
         public void ConsoleWriteLine()
         {
             //Console.WriteLine(FromRainbow(Rainbow.Green));
@@ -51,7 +48,6 @@ namespace 基本语法
                 _ => string.Empty
             };
         }
-
 
         /// <summary>
         /// 元组模式

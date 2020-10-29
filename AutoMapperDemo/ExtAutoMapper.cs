@@ -2,33 +2,36 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoMapperDemo
 {
     public class ExtAutoMapper
     {
         #region 字段
+
         protected MapperConfiguration config;
         protected IMapper mapper;
         private static readonly ExtAutoMapper dal = new ExtAutoMapper();
+
         public static ExtAutoMapper GetInstance
         {
             get { return dal; }
         }
-        #endregion
+
+        #endregion 字段
 
         #region 初始化
+
         public ExtAutoMapper()
         {
             config = new MapperConfiguration(cfg => Create(cfg));
             mapper = config.CreateMapper();
         }
 
-        #endregion
+        #endregion 初始化
 
         #region 方法
+
         /// <summary>
         /// 类型映射
         /// </summary>
@@ -69,7 +72,7 @@ namespace AutoMapperDemo
             if (list == null) return Enumerable.Empty<TDestination>().ToList();
             return Array.ConvertAll(list.ToArray(), item => mapper.Map<TDestination>(item));
         }
-        #endregion
 
+        #endregion 方法
     }
 }

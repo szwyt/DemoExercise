@@ -1,18 +1,17 @@
-﻿using System;
-using System.Linq;
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Command;
+﻿using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Protocol;
+using System;
+using System.Linq;
 
 namespace SuperSocketDemo
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             // 注意是TelnetServer
             var appServer = new TelnetServer();
-            appServer.Setup("192.168.0.20",300);
+            appServer.Setup("192.168.0.20", 300);
             // 开始监听
             appServer.Start();
             //1.
@@ -29,7 +28,7 @@ namespace SuperSocketDemo
         }
 
         //1.
-        static void appServer_NewSessionConnected(TelnetSession session)
+        private static void appServer_NewSessionConnected(TelnetSession session)
         {
             //Console.WriteLine($"服务端得到来自客户端的连接成功");
             //var count = appServer.GetAllSessions().Count();
@@ -37,7 +36,7 @@ namespace SuperSocketDemo
             //session.Send("Welcome to SuperSocket Telnet Server");
         }
 
-        static void appServer_NewSessionClosed(TelnetSession session, CloseReason aaa)
+        private static void appServer_NewSessionClosed(TelnetSession session, CloseReason aaa)
         {
             //Console.WriteLine($"服务端 失去 来自客户端的连接" + session.SessionID + aaa.ToString());
             //var count = appServer.GetAllSessions().Count();
@@ -45,7 +44,7 @@ namespace SuperSocketDemo
         }
 
         //2.
-        static void appServer_NewRequestReceived(TelnetSession session, StringRequestInfo requestInfo)
+        private static void appServer_NewRequestReceived(TelnetSession session, StringRequestInfo requestInfo)
         {
             switch (requestInfo.Key.ToUpper())
             {
@@ -70,7 +69,5 @@ namespace SuperSocketDemo
                     break;
             }
         }
-
     }
-    
 }

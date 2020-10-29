@@ -1,13 +1,10 @@
 ﻿using RabbitMQ.Client;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace RabbitMQT
 {
-    class Program
+    internal class Program
     {
         private static void Main()
         {
@@ -38,7 +35,7 @@ namespace RabbitMQT
                         channel.QueueBind("SISOqueue", "SISOExchange", "optionalRoutingKeys");
                         // 设置消息属性
                         var properties = channel.CreateBasicProperties();
-                        properties.DeliveryMode = 2; //消息是持久的，存在并不会受服务器重启影响 
+                        properties.DeliveryMode = 2; //消息是持久的，存在并不会受服务器重启影响
 
                         //准备开始推送
                         //发布的消息可以是任何一个(可以被序列化的)字节数组，如序列化对象，一个实体的ID，或只是一个字符串
@@ -68,5 +65,4 @@ namespace RabbitMQT
             Console.ReadKey(true);
         }
     }
-
 }

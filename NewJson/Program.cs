@@ -1,17 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NewJson
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             string fp = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "1.json");
             writeJson(fp, new ConfigInfo
@@ -28,7 +24,7 @@ namespace NewJson
             Console.ReadKey();
         }
 
-        static void writeJson(string path, ConfigInfo obj)
+        private static void writeJson(string path, ConfigInfo obj)
         {
             if (File.Exists(path))
             {
@@ -39,7 +35,7 @@ namespace NewJson
             File.WriteAllText(path, JsonConvert.SerializeObject(obj));
         }
 
-        static ConfigInfo readJson(string path)
+        private static ConfigInfo readJson(string path)
         {
             if (File.Exists(path))
             {

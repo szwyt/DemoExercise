@@ -1,19 +1,15 @@
 ﻿using SpeechLib;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Speech.Synthesis;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace 语音播报
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            //Task.Run(()=> 
+            //Task.Run(()=>
             //{
             //    for (int i = 0; i < 3; i++)
             //    {
@@ -32,7 +28,6 @@ namespace 语音播报
             }
             Console.ReadKey();
         }
-
 
         private static void Thread_AutoPrint()
         {
@@ -56,7 +51,7 @@ namespace 语音播报
         {
             SpeechSynthesizer speak = new SpeechSynthesizer();
             speak.Volume = 100;//设置音量 0~100
-            speak.Rate = 1;//设置语速 
+            speak.Rate = 1;//设置语速
             //speak.SelectVoice("Microsoft Huihui Desktop");
             speak.SpeakAsync(inData.Replace(" ", "").Replace("   ", "").Replace("\r\n", ""));
         }
@@ -78,7 +73,7 @@ namespace 语音播报
 
             SpeechSynthesizer speak = new SpeechSynthesizer();
             speak.Volume = 100;//设置音量 0~100
-            speak.Rate = 1;//设置语速 
+            speak.Rate = 1;//设置语速
             //speak.SelectVoice("Microsoft Huihui Desktop");
             //speak.SelectVoice("Microsoft Kangkang-Chinese(Simplifined,PRC)");
             speak.SpeakAsync(inData.Replace(" ", "").Replace("   ", "").Replace("\r\n", ""));
@@ -100,6 +95,7 @@ namespace 语音播报
             chineseStr = null;
             return new string(c);
         }
+
         public static string NumberToChinese(string numberStr)
         {
             string numStr = "0123456789";
@@ -114,6 +110,6 @@ namespace 语音播报
             numStr = null;
             chineseStr = null;
             return new string(c);
-        } 
+        }
     }
 }

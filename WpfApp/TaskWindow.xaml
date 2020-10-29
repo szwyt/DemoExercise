@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp"
         mc:Ignorable="d"
-        Title="TaskWindow" Height="450" Width="800" 
+        Title="TaskWindow" Height="450" Width="800"
         Loaded="Window_Loaded">
     <Grid>
-        <Label Name="lab" Content="你好"/>
+        <Label Name="lab" Content="你好" />
     </Grid>
 </Window>

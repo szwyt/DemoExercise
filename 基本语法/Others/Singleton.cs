@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace 基本语法
 {
@@ -12,6 +8,7 @@ namespace 基本语法
     public sealed class Singleton
     {
         private static Singleton _Singleton = null;
+
         private Singleton()
         {
             Console.WriteLine("Singleton被构造");

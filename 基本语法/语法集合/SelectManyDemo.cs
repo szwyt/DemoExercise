@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace 基本语法
 {
@@ -30,7 +28,7 @@ namespace 基本语法
         }
     }
 
-    class Student
+    internal class Student
     {
         public int Score { get; set; }
 
@@ -40,7 +38,7 @@ namespace 基本语法
         }
     }
 
-    class Teacher
+    internal class Teacher
     {
         public string Name { get; set; }
 
