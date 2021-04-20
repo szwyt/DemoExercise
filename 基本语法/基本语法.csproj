@@ -57,6 +57,7 @@
     <Compile Include="语法集合\FuncDemo.cs" />
     <Compile Include="语法集合\GenericsDemo.cs" />
     <Compile Include="语法集合\LambdaDemo.cs" />
+    <Compile Include="语法集合\LinqToSql.cs" />
     <Compile Include="语法集合\ReferenceTypePassing.cs" />
     <Compile Include="语法集合\ReflectDemo.cs" />
     <Compile Include="语法集合\SelectManyDemo.cs" />

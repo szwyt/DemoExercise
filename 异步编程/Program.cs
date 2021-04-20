@@ -9,7 +9,7 @@ namespace 异步编程
         private static async Task Main(string[] args)
         {
             Console.WriteLine($"MainBegin:{Thread.CurrentThread.ManagedThreadId.ToString()}");
-            await PagePaint();
+            await GetIdAsync();
             Console.WriteLine($"MainEnd");
             Console.ReadKey();
         }
@@ -17,11 +17,13 @@ namespace 异步编程
         public async static Task GetIdAsync()
         {
             Console.WriteLine($"GetIdAsyncBegin:");
-            await Task.Run(() =>
-              {
-                  Thread.Sleep(5000);
-                  Console.WriteLine($"当前线程id:{Thread.CurrentThread.ManagedThreadId.ToString()}");
-              });
+            Task task = Task.Run(() =>
+               {
+                   Thread.Sleep(5000);
+                   Console.WriteLine($"当前线程id:{Thread.CurrentThread.ManagedThreadId.ToString()}");
+               });
+            Console.WriteLine($"执行下面方法:");
+            await task;
             Console.WriteLine($"GetIdAsyncEnd:");
         }
 

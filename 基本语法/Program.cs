@@ -83,11 +83,20 @@ namespace 基本语法
             #region Lambda表达式
 
             {
-                IConsoleTool consoleTool = new LambdaDemo();
-                consoleTool.ConsoleWriteLine();
+                //IConsoleTool consoleTool = new LambdaDemo();
+                //consoleTool.ConsoleWriteLine();
             }
 
             #endregion Lambda表达式
+
+            #region LinqToSql
+
+            {
+                IConsoleTool consoleTool = new LinqToSql();
+                consoleTool.ConsoleWriteLine();
+            }
+
+            #endregion LinqToSql
 
             Console.ReadKey();
         }

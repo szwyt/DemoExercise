@@ -3,6 +3,8 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace WpfApp
 {
@@ -14,6 +16,7 @@ namespace WpfApp
         public ButtonWindow()
         {
             InitializeComponent();
+            //BindingOperations.EnableCollectionSynchronization();
             //double ScreenWidth = System.Windows.SystemParameters.PrimaryScreenWidth;//WPF
             //this.Top = 0;
             //this.Left = ScreenWidth - this.Width;
@@ -21,10 +24,10 @@ namespace WpfApp
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            this.btn.IsEnabled = false;
+            (sender as Button).IsEnabled = false;
             Console.WriteLine($"当前线程id:{Thread.CurrentThread.ManagedThreadId.ToString()}");
             this.txt.Text = await VsAsync();
-            this.btn.IsEnabled = true;
+            (sender as Button).IsEnabled = true;
         }
 
         public async Task<string> GetIdAsync()
@@ -46,7 +49,7 @@ namespace WpfApp
                  {
                      Console.WriteLine($"{i}");
                  }
-                 await Task.Delay(10000);
+                 await Task.Delay(5000);
                  return "123";
              });
         }
