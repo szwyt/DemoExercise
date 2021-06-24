@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace 基本语法
         {
             new Userinfo{Id =1,UserName="一级",Pid=0 },
             new Userinfo{Id =2,UserName="二级",Pid=1 },
-             new Userinfo{Id =3,UserName="三级",Pid=2 },
+            new Userinfo{Id =3,UserName="三级",Pid=2 },
             new Userinfo{Id =4,UserName="一级1",Pid=0 },
             new Userinfo{Id =5,UserName="二级1",Pid=4 },
              new Userinfo{Id =6,UserName="三级1",Pid=5 },
@@ -51,10 +52,66 @@ namespace 基本语法
 
             //TestToListPerformance();
             //TestNoToList();
-            var s = diguilist(0);
-            Console.WriteLine();
+            var s = JsonConvert.SerializeObject(diguilist(0));
+            var list = JsonConvert.DeserializeObject<List<Userinfo>>(s);
+            var a = new List<Userinfo>();
+            GetMenuInfoLists(list, a, 0);
+            Console.WriteLine(s);
 
             #endregion 左连接
+        }
+
+        /// <summary>
+        /// 将父子级数据结构转换为普通list
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public static void GetMenuInfoLists(List<Userinfo> list, List<Userinfo> Resultlist, int pid)
+        {
+            foreach (var item in list)
+            {
+                Resultlist.Add(item);
+                if (item.ChildrenList.Count(c => c.Pid == item.Id) > 0)
+                {
+                    GetMenuInfoLists(item.ChildrenList, Resultlist, item.Id);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 将父子级数据结构转换为普通list
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public static List<Userinfo> GetMenuInfoList(List<Userinfo> list)
+        {
+            List<Userinfo> Resultlist = new List<Userinfo>();
+            foreach (var item in list)
+            {
+                OperationChildData(Resultlist, item);
+                Resultlist.Add(item);
+            }
+            return Resultlist;
+        }
+
+        /// <summary>
+        /// 递归子级数据
+        /// </summary>
+        /// <param name="treeDataList">树形列表数据</param>
+        /// <param name="parentItem">父级model</param>
+        public static void OperationChildData(List<Userinfo> AllList, Userinfo item)
+        {
+            if (item.ChildrenList != null)
+            {
+                if (item.ChildrenList.Count > 0)
+                {
+                    AllList.AddRange(item.ChildrenList);
+                    foreach (var subItem in item.ChildrenList)
+                    {
+                        OperationChildData(AllList, subItem);
+                    }
+                }
+            }
         }
 
         /// <summary>

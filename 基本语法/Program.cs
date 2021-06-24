@@ -98,6 +98,15 @@ namespace 基本语法
 
             #endregion LinqToSql
 
+            #region LambdaTree
+
+            {
+                //IConsoleTool consoleTool = new LambdaTree();
+                //consoleTool.ConsoleWriteLine();
+            }
+
+            #endregion LambdaTree
+
             Console.ReadKey();
         }
     }

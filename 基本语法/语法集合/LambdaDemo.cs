@@ -31,6 +31,7 @@ namespace 基本语法
                 foreach (var item in list)
                 {
                     Console.WriteLine(item.Key.DateInt);
+                    Console.WriteLine(item.Key.DateTimeStr);
                     foreach (var info in item)
                     {
                         Console.WriteLine(info.DateInt);
