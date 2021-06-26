@@ -26,7 +26,7 @@ namespace MongoDb.Models
             get;
             set;
         }
-
+        
         [BsonElement(nameof(IsDelete))]
         public bool IsDelete { get; set; }
 

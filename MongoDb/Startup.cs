@@ -40,9 +40,14 @@ namespace MongoDb
             services.AddSingleton<IMongoDatabase>(x =>
             {
                 var client = new MongoClient(conStr);
-                return client.GetDatabase(dbName);
+                var dbcontext = client.GetDatabase(dbName);
+                return dbcontext;
             });
             services.AddTransient(typeof(DbContext<>));
+#if DEBUG
+           // InitData(services);
+#else
+# endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,6 +73,30 @@ namespace MongoDb
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            ServiceLocator.Instance = app.ApplicationServices;
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="services">ServiceCollection</param>
+        /// <returns>模板ID</returns>
+        private async Task InitData(IServiceCollection services)
+        {
+            var setting = services.BuildServiceProvider().GetService<DbContext<Province>>();
+            for (int i = 5590077; i < 10000000; i++)
+            {
+                await setting.Create(new Province { Name = $"MongoDb{i}", Age = i });
+            }
+        }
+
+        /// <summary>
+        /// 所有的注入对象集合
+        /// </summary>
+        public class ServiceLocator
+        {
+            public static IServiceProvider Instance { get; set; }
         }
     }
 
