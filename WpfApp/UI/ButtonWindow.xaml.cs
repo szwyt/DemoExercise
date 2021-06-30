@@ -26,16 +26,16 @@ namespace WpfApp
         {
             (sender as Button).IsEnabled = false;
             Console.WriteLine($"当前线程id:{Thread.CurrentThread.ManagedThreadId.ToString()}");
-            this.txt.Text = await VsAsync();
+            this.txt.Text = await GetIdAsync();
             (sender as Button).IsEnabled = true;
         }
 
         public async Task<string> GetIdAsync()
         {
-            return await Task.Run(() =>
+            return await Task.Run(async () =>
             {
                 WebClient webClient = new WebClient();
-                Thread.Sleep(3000);
+                await Task.Delay(5000);
                 Console.WriteLine($"当前线程id:{Thread.CurrentThread.ManagedThreadId.ToString()}");
                 return webClient.DownloadString("https://www.google.com/");
             });
