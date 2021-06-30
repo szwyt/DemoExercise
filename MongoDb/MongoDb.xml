@@ -1,0 +1,405 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MongoDb</name>
+    </assembly>
+    <members>
+        <member name="M:MongoDb.Controllers.AddressController.AddAddress(System.Collections.Generic.List{MongoDb.Models.Address})">
+            <summary>
+            新增或者修改
+            </summary>
+            <param name="address"></param>
+        </member>
+        <member name="M:MongoDb.Controllers.AddressController.DeleteAdress(System.String)">
+            <summary>
+            删除地址
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:MongoDb.Controllers.AddressController.GetAllAddress">
+            <summary>
+            获取所有与地址
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Controllers.AddressController.GetAddressTotalCount">
+            <summary>
+            获取地址总数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Controllers.AddressController.GetAddressByProvince(System.String,System.Int32,System.Int32)">
+            <summary>
+            分页获取（可以进一步封装查询条件）
+            </summary>
+            <param name="province"></param>
+            <param name="pageIndex"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Filter.CustomerExceptionFilter.OnException(Microsoft.AspNetCore.Mvc.Filters.ExceptionContext)">
+            <summary>
+            发生异常进入
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="T:MongoDb.Models.AddressContext">
+            <summary>
+            地址操作类
+            </summary>
+        </member>
+        <member name="P:MongoDb.Models.AddressContext.IndexName">
+            <summary>
+            索引名称
+            </summary>
+        </member>
+        <member name="M:MongoDb.Models.AddressContext.GetAddresses(System.String,System.Int32,System.Int32)">
+            <summary>
+            获取地址
+            </summary>
+            <param name="province"></param>
+            <param name="pageIndex"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.AddressContext.GetAllAddresses">
+            <summary>
+            获取所有地址
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.AddressContext.DeleteByQuery(System.String)">
+            <summary>
+            删除指定城市的数据
+            </summary>
+            <param name="city"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.BaseRepository`1.#ctor(MongoDb.Models.DatabaseSettings,System.String)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="config"></param>
+            <param name="tableName">表名</param>
+        </member>
+        <member name="M:MongoDb.Models.BaseRepository`1.Get">
+            <summary>
+            获取所有
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.BaseRepository`1.Get(System.String)">
+            <summary>
+            获取单个
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.BaseRepository`1.Create(`0)">
+            <summary>
+            创建
+            </summary>
+            <param name="T"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.BaseRepository`1.Update(System.String,`0)">
+            <summary>
+            更新
+            </summary>
+            <param name="id"></param>
+            <param name="TIn"></param>
+        </member>
+        <member name="M:MongoDb.Models.BaseRepository`1.Remove(`0)">
+            <summary>
+            删除
+            </summary>
+            <param name="TIn"></param>
+        </member>
+        <member name="M:MongoDb.Models.BaseRepository`1.Remove(System.String)">
+            <summary>
+            根据id删除
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:MongoDb.Models.DbContext`1.Get(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+            <summary>
+            获取所有
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.DbContext`1.Get(System.String)">
+            <summary>
+            获取单个
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.DbContext`1.Create(`0)">
+            <summary>
+            创建
+            </summary>
+            <param name="T"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.DbContext`1.Update(System.String,`0)">
+            <summary>
+            更新
+            </summary>
+            <param name="id"></param>
+            <param name="TIn"></param>
+        </member>
+        <member name="M:MongoDb.Models.DbContext`1.Remove(`0)">
+            <summary>
+            删除
+            </summary>
+            <param name="TIn"></param>
+        </member>
+        <member name="M:MongoDb.Models.DbContext`1.Remove(System.String)">
+            <summary>
+            根据id删除
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="T:MongoDb.Models.ElasticClientExtension">
+            <summary>
+            ElasticClient 扩展类
+            </summary>
+        </member>
+        <member name="M:MongoDb.Models.ElasticClientExtension.CreateIndex``1(Nest.ElasticClient,System.String,System.Int32,System.Int32)">
+            <summary>
+            创建索引
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="elasticClient"></param>
+            <param name="indexName"></param>
+            <param name="numberOfShards"></param>
+            <param name="numberOfReplicas"></param>
+            <returns></returns>
+        </member>
+        <member name="T:MongoDb.Models.ElasticSearch.IBaseEsContext">
+            <summary>
+            接口限定
+            </summary>
+        </member>
+        <member name="T:MongoDb.Models.ElasticSearch.BaseEsContext`1">
+            <summary>
+            es操作基类
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:MongoDb.Models.ElasticSearch.BaseEsContext`1.InsertMany(System.Collections.Generic.List{`0})">
+            <summary>
+            批量更新
+            </summary>
+            <param name="tList"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.ElasticSearch.BaseEsContext`1.GetTotalCount">
+            <summary>
+            获取总数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.ElasticSearch.BaseEsContext`1.DeleteById(System.String)">
+            <summary>
+            根据Id删除数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:MongoDb.Models.EsClientProvider">
+            <summary>
+            ElasticClient提供者
+            </summary>
+        </member>
+        <member name="M:MongoDb.Models.EsClientProvider.GetClient">
+            <summary>
+            获取elastic client
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.EsClientProvider.GetClient(System.String)">
+            <summary>
+            指定index获取ElasticClient
+            </summary>
+            <param name="indexName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.EsClientProvider.GetClient(System.String,System.String)">
+            <summary>
+            根据url获取ElasticClient
+            </summary>
+            <param name="url"></param>
+            <param name="defaultIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.EsClientProvider.GetClient(System.String[],System.String)">
+            <summary>
+            根据urls获取ElasticClient
+            </summary>
+            <param name="urls"></param>
+            <param name="defaultIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="T:MongoDb.Models.IEsClientProvider">
+            <summary>
+            ElasticClient 提供者接口
+            </summary>
+        </member>
+        <member name="M:MongoDb.Models.IEsClientProvider.GetClient">
+            <summary>
+            获取ElasticClient
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.IEsClientProvider.GetClient(System.String)">
+            <summary>
+            指定index获取ElasticClient
+            </summary>
+            <param name="indexName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:MongoDb.Models.PageModel`1">
+            <summary>
+            通用分页信息类
+            </summary>
+        </member>
+        <member name="P:MongoDb.Models.PageModel`1.pageIndex">
+            <summary>
+            当前页标
+            </summary>
+        </member>
+        <member name="P:MongoDb.Models.PageModel`1.pageCount">
+            <summary>
+            总页数
+            </summary>
+        </member>
+        <member name="P:MongoDb.Models.PageModel`1.dataCount">
+            <summary>
+            数据总数
+            </summary>
+        </member>
+        <member name="P:MongoDb.Models.PageModel`1.PageSize">
+            <summary>
+            每页大小
+            </summary>
+        </member>
+        <member name="P:MongoDb.Models.PageModel`1.data">
+            <summary>
+            返回数据
+            </summary>
+        </member>
+        <member name="T:MongoDb.Models.UtilConvert">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:MongoDb.Models.UtilConvert.ObjToInt(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="thisValue"></param>
+             <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.UtilConvert.ObjToInt(System.Object,System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="thisValue"></param>
+             <param name="errorValue"></param>
+             <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.UtilConvert.ObjToMoney(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="thisValue"></param>
+             <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.UtilConvert.ObjToMoney(System.Object,System.Double)">
+             <summary>
+            
+             </summary>
+             <param name="thisValue"></param>
+             <param name="errorValue"></param>
+             <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.UtilConvert.ObjToString(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="thisValue"></param>
+             <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.UtilConvert.IsNotEmptyOrNull(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="thisValue"></param>
+             <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.UtilConvert.ObjToString(System.Object,System.String)">
+             <summary>
+            
+             </summary>
+             <param name="thisValue"></param>
+             <param name="errorValue"></param>
+             <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.UtilConvert.ObjToDecimal(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="thisValue"></param>
+             <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.UtilConvert.ObjToDecimal(System.Object,System.Decimal)">
+             <summary>
+            
+             </summary>
+             <param name="thisValue"></param>
+             <param name="errorValue"></param>
+             <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.UtilConvert.ObjToDate(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="thisValue"></param>
+             <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.UtilConvert.ObjToDate(System.Object,System.DateTime)">
+             <summary>
+            
+             </summary>
+             <param name="thisValue"></param>
+             <param name="errorValue"></param>
+             <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.UtilConvert.ObjToBool(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="thisValue"></param>
+             <returns></returns>
+        </member>
+        <member name="M:MongoDb.Models.UtilConvert.DateToTimeStamp(System.DateTime)">
+            <summary>
+            获取当前时间的时间戳
+            </summary>
+            <param name="thisValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MongoDb.Startup.InitData(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+             <summary>
+            
+             </summary>
+             <param name="services">ServiceCollection</param>
+             <returns>模板ID</returns>
+        </member>
+        <member name="T:MongoDb.Startup.ServiceLocator">
+            <summary>
+            所有的注入对象集合
+            </summary>
+        </member>
+    </members>
+</doc>

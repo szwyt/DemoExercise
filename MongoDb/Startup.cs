@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MongoDb.Filter;
 using MongoDb.Models;
 using MongoDB.Driver;
 using System;
@@ -30,7 +31,14 @@ namespace MongoDb
         {
             var conStr = ((ConfigurationSection)Configuration.GetSection("ConnectionStrings:ConnectionString")).Value;
             var dbName = ((ConfigurationSection)Configuration.GetSection("ConnectionStrings:DatabaseName")).Value;
-            services.AddControllersWithViews().AddJsonOptions(options =>
+            services.AddControllers(o =>
+            {
+                // 全局异常过滤
+                o.Filters.Add(typeof(CustomerExceptionFilter));
+            });
+
+            services.AddControllersWithViews()
+             .AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.IgnoreNullValues = false;
                 // json传参时日期格式转换
@@ -45,9 +53,9 @@ namespace MongoDb
             });
             services.AddTransient(typeof(DbContext<>));
 #if DEBUG
-           // InitData(services);
+            // InitData(services);
 #else
-# endif
+#endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
