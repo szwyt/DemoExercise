@@ -1,7 +1,7 @@
 # https://hub.docker.com/_/microsoft-dotnet
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /source
-COPY ./githubTest /source
+COPY ./ /source
 WORKDIR /source/MongoDb
 RUN dotnet restore
 RUN dotnet publish -c Release -o /source/publish --no-restore
