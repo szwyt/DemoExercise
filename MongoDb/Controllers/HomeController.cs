@@ -27,11 +27,13 @@ namespace MongoDb.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string name = "", int pageSize = 10, int pageIndex = 1)
+        public async Task<IActionResult> Get(string name = "", int age = 0, int pageSize = 10, int pageIndex = 1)
         {
             var predicate = PredicateBuilder.New<Province>(true);
             if (!string.IsNullOrWhiteSpace(name))
                 predicate.And(x => x.Name.Contains(name));
+            if (age > 0)
+                predicate.And(x => x.Age > age);
             PageModel<Province> pageModel = await _context.Get(pageIndex, pageSize, o => o.AddTime, predicate, false);
             return Json(new { total = pageModel.dataCount, rows = pageModel.data });
         }
