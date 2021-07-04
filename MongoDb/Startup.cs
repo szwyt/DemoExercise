@@ -53,7 +53,7 @@ namespace MongoDb
             });
             services.AddTransient(typeof(DbContext<>));
 #if DEBUG
-            // InitData(services);
+            InitData(services);
 #else
 #endif
         }
@@ -92,11 +92,18 @@ namespace MongoDb
         /// <returns>Ä£°åID</returns>
         private async Task InitData(IServiceCollection services)
         {
-            var setting = services.BuildServiceProvider().GetService<DbContext<Province>>();
-            for (int i = 5590077; i < 10000000; i++)
+            await Task.Run(async () =>
             {
-                await setting.Create(new Province { Name = $"MongoDb{i}", Age = i });
-            }
+                var setting = services.BuildServiceProvider().GetService<DbContext<Province>>();
+                List<Province> list = new List<Province>();
+                for (int i = 19999999; i <= 30000000; i++)
+                {
+                    list.Add(new Province { Name = $"MongoDb{i}", Age = i });
+                }
+
+                await setting.CreateMany(list);
+            });
+
         }
 
         /// <summary>
