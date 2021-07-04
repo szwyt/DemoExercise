@@ -53,7 +53,7 @@ namespace MongoDb
             });
             services.AddTransient(typeof(DbContext<>));
 #if DEBUG
-            InitData(services);
+            //InitData(services);
 #else
 #endif
         }
@@ -96,7 +96,7 @@ namespace MongoDb
             {
                 var setting = services.BuildServiceProvider().GetService<DbContext<Province>>();
                 List<Province> list = new List<Province>();
-                for (int i = 19999999; i <= 30000000; i++)
+                for (int i = 71200501; i <= 100000000; i++)
                 {
                     list.Add(new Province { Name = $"MongoDb{i}", Age = i });
                 }

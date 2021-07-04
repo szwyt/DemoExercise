@@ -49,8 +49,8 @@ namespace MongoDb.Models
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            //long total = await data.CountDocumentsAsync();
-            long total = await DbSet.EstimatedDocumentCountAsync();
+            long total = await data.CountDocumentsAsync();
+            //long total = await DbSet.EstimatedDocumentCountAsync();
             sw.Stop();
             Console.WriteLine(sw.Elapsed.TotalMilliseconds);
             return new PageModel<T>
