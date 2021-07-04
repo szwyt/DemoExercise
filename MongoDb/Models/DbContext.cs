@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -46,8 +47,11 @@ namespace MongoDb.Models
                  DbSet.Find(filter).SortBy(orderBy) :
                  DbSet.Find(filter).SortByDescending(orderBy);
 
-
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             long total = await data.CountDocumentsAsync();
+            sw.Stop();
+            Console.WriteLine(sw.Elapsed.TotalMilliseconds);
             return new PageModel<T>
             {
                 dataCount = total,
