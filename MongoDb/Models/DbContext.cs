@@ -49,7 +49,8 @@ namespace MongoDb.Models
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            long total = await data.CountDocumentsAsync();
+            //long total = await data.CountDocumentsAsync();
+            long total = await DbSet.EstimatedDocumentCountAsync();
             sw.Stop();
             Console.WriteLine(sw.Elapsed.TotalMilliseconds);
             return new PageModel<T>
@@ -83,6 +84,21 @@ namespace MongoDb.Models
             T.AddTime = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);// mongodb里面存的格林时间;
             await DbSet.InsertOneAsync(T);
             return T;
+        }
+
+        /// <summary>
+        /// 创建
+        /// </summary>
+        /// <param name="T"></param>
+        /// <returns></returns>
+        public async Task CreateMany(List<T> list)
+        {
+            list.ForEach(o =>
+            {
+                o.AddTime = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);// mongodb里面存的格林时间;
+            });
+
+            await DbSet.InsertManyAsync(list);
         }
 
         /// <summary>
