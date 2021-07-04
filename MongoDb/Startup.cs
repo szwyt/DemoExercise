@@ -96,9 +96,9 @@ namespace MongoDb
             {
                 var setting = services.BuildServiceProvider().GetService<DbContext<Province>>();
                 List<Province> list = new List<Province>();
-                for (int i = 71200501; i <= 100000000; i++)
+                for (int i = 1; i <= 1000000; i++)
                 {
-                    list.Add(new Province { Name = $"MongoDb{i}", Age = i });
+                    list.Add(new Province { Name = $"MongoDb{i}", Age = i, AddTime = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc) });
                 }
 
                 await setting.CreateMany(list);

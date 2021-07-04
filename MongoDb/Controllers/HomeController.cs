@@ -34,7 +34,7 @@ namespace MongoDb.Controllers
                 predicate.And(x => x.Name.Contains(name));
             if (age > 0)
                 predicate.And(x => x.Age > age);
-            PageModel<Province> pageModel = await _context.Get(pageIndex, pageSize, o => o.AddTime, predicate, false);
+            PageModel<Province> pageModel = await _context.Get(pageIndex, pageSize, o => o.Id, predicate, false);
             return Json(new { total = pageModel.dataCount, rows = pageModel.data });
         }
 
