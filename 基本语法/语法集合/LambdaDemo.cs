@@ -25,17 +25,22 @@ namespace 基本语法
             #region Lambda表达式
 
             {
-                List<User> listDistinct1 = users.DistinctLingbug<User, int>(s => s.DateInt).ToList();
-                List<User> listDistinct2 = users.Distinct(new DistinctCompareModel<User>((u, s) => u.DateInt == s.DateInt || u.DateTime == s.DateTime)).ToList();
+                //List<User> listDistinct1 = users.DistinctLingbug<User, int>(s => s.DateInt).ToList();
+                List<User> listDistinct2 = users.Distinct(new DistinctCompareModel<User>((u, s) => u.DateInt == s.DateInt || u.DateTimeStr == s.DateTimeStr)).ToList();
                 var list = users.GroupBy(o => new { o.DateInt, o.DateTimeStr });
-                foreach (var item in list)
+                //foreach (var item in list)
+                //{
+                //    Console.WriteLine(item.Key.DateInt);
+                //    Console.WriteLine(item.Key.DateTimeStr);
+                //    foreach (var info in item)
+                //    {
+                //        Console.WriteLine(info.DateInt);
+                //    }
+                //}
+
+                foreach (var info in listDistinct2)
                 {
-                    Console.WriteLine(item.Key.DateInt);
-                    Console.WriteLine(item.Key.DateTimeStr);
-                    foreach (var info in item)
-                    {
-                        Console.WriteLine(info.DateInt);
-                    }
+                    Console.WriteLine(info.DateInt);
                 }
             }
 

@@ -4,10 +4,9 @@ namespace 基本语法
 {
     internal class Program
     {
-        private static readonly string hello;
-
         private static void Main(string[] args)
         {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
             #region 字典排序Demo练习
 
             //{
@@ -92,8 +91,8 @@ namespace 基本语法
             #region LinqToSql
 
             {
-                IConsoleTool consoleTool = new LinqToSql();
-                consoleTool.ConsoleWriteLine();
+                //IConsoleTool consoleTool = new LinqToSql();
+                //consoleTool.ConsoleWriteLine();
             }
 
             #endregion LinqToSql
@@ -101,12 +100,12 @@ namespace 基本语法
             #region LambdaTree
 
             {
-                //IConsoleTool consoleTool = new LambdaTree();
-                //consoleTool.ConsoleWriteLine();
+                IConsoleTool consoleTool = new LambdaTree();
+                consoleTool.ConsoleWriteLine();
             }
 
             #endregion LambdaTree
-
+           
             Console.ReadKey();
         }
     }
