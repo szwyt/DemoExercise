@@ -6,6 +6,17 @@ namespace 异步编程
 {
     internal class Program
     {
+        //private static void Main(string[] args)
+        //{
+        //    for (int i = 0; i < 10; i++)
+        //    {
+        //        ThreadPool.QueueUserWorkItem(m =>
+        //        {
+        //            Console.WriteLine(Thread.CurrentThread.ManagedThreadId.ToString());
+        //        });
+        //    }
+        //    Console.Read();
+        //}
         private static async Task Main(string[] args)
         {
             Console.WriteLine($"MainBegin:{Thread.CurrentThread.ManagedThreadId.ToString()}");

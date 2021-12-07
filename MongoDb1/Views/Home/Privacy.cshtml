@@ -1,0 +1,34 @@
+﻿@model Province
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = !string.IsNullOrWhiteSpace(Model.Id) ? "编辑" : "添加";
+}
+<h3>@ViewData["Title"]</h3>
+
+<form class="form-inline" onsubmit="return false;" id="serachForm">
+    <input type="hidden" id="id" name="id" value="@Model.Id" />
+    <div class="form-group">
+        <div class="input-group">
+            <div class="input-group-addon">名字</div>
+            <input type="text" class="form-control" id="name" name="name" placeholder="name" value="@Model.Name">
+        </div>
+        <div class="input-group">
+            <div class="input-group-addon">年龄</div>
+            <input type="number" class="form-control" id="age" name="age" placeholder="age" value="@Model.Age">
+        </div>
+    </div>
+    <button class="btn btn-primary" id="add">保存</button>
+</form>
+<script type="text/javascript">
+    $(function () {
+        $('#add').click(function () {
+            $.post("/home/post", { info: $('#serachForm').serializeObject() }, function (res) {
+                if (res.flag) {
+                    window.location.href = '/home/index';
+                } else {
+                    alert(res.msg);
+                }
+            });
+        })
+    })
+</script>
