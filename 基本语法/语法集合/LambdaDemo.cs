@@ -20,14 +20,50 @@ namespace 基本语法
             };
         }
 
+
+        class Student
+        {
+            public int Score { get; set; }
+
+            public Student(int score)
+            {
+                this.Score = score;
+            }
+        }
+
+        class Teacher
+        {
+            public string Name { get; set; }
+
+            public List<Student> Students;
+
+            public Teacher(string order, List<Student> students)
+            {
+                this.Name = order;
+
+                this.Students = students;
+            }
+        }
+
+
         public void ConsoleWriteLine()
         {
             #region Lambda表达式
 
             {
+                List<Teacher> teachers = new List<Teacher>
+                {
+                    new Teacher("a",new List<Student>{ new Student(100),new Student(90),new Student(30) }),
+                    new Teacher("b",new List<Student>{ new Student(100),new Student(90),new Student(60) }),
+                    new Teacher("c",new List<Student>{ new Student(100),new Student(90),new Student(40) }),
+                    new Teacher("d",new List<Student>{ new Student(100),new Student(90),new Student(60) }),
+                    new Teacher("e",new List<Student>{ new Student(100),new Student(90),new Student(50) }),
+                    new Teacher("f",new List<Student>{ new Student(100),new Student(90),new Student(60) }),
+                    new Teacher("g",new List<Student>{ new Student(100),new Student(90),new Student(60) })
+                };
                 //List<User> listDistinct1 = users.DistinctLingbug<User, int>(s => s.DateInt).ToList();
-                List<User> listDistinct2 = users.Distinct(new DistinctCompareModel<User>((u, s) => u.DateInt == s.DateInt || u.DateTimeStr == s.DateTimeStr)).ToList();
-                var list = users.GroupBy(o => new { o.DateInt, o.DateTimeStr });
+                //List<User> listDistinct2 = users.Distinct(new DistinctCompareModel<User>((u, s) => u.DateInt == s.DateInt || u.DateTimeStr == s.DateTimeStr)).ToList();
+                //var list = users.GroupBy(o => new { o.DateInt, o.DateTimeStr });
                 //foreach (var item in list)
                 //{
                 //    Console.WriteLine(item.Key.DateInt);
@@ -38,9 +74,23 @@ namespace 基本语法
                 //    }
                 //}
 
-                foreach (var info in listDistinct2)
+                //foreach (var info in listDistinct2)
+                //{
+                //    Console.WriteLine(info.DateInt);
+                //}
+
+                //users = new List<User>();
+                // 数据数量为0的时候除了sum,其他的聚合函数都把报错
+                //Console.WriteLine(users.Sum(s => s.DateInt));
+                //Console.WriteLine(users.Average(s => s.DateInt));
+                //Console.WriteLine(users.Max(s => s.DateInt));
+                //Console.WriteLine(users.Min(s => s.DateInt));
+
+                var list2 = teachers.SelectMany(t => t.Students).Where(s => s.Score < 60).ToList();
+
+                foreach (var item in list2)
                 {
-                    Console.WriteLine(info.DateInt);
+                    Console.WriteLine(item.Score);
                 }
             }
 

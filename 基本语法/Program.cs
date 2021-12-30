@@ -6,7 +6,7 @@ namespace 基本语法
     {
         private static void Main(string[] args)
         {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.ForegroundColor = ConsoleColor.Red;
             #region 字典排序Demo练习
 
             //{
@@ -82,8 +82,8 @@ namespace 基本语法
             #region Lambda表达式
 
             {
-                //IConsoleTool consoleTool = new LambdaDemo();
-                //consoleTool.ConsoleWriteLine();
+                IConsoleTool consoleTool = new LambdaDemo();
+                consoleTool.ConsoleWriteLine();
             }
 
             #endregion Lambda表达式
@@ -100,8 +100,8 @@ namespace 基本语法
             #region LambdaTree
 
             {
-                IConsoleTool consoleTool = new LambdaTree();
-                consoleTool.ConsoleWriteLine();
+                //IConsoleTool consoleTool = new LambdaTree();
+                //consoleTool.ConsoleWriteLine();
             }
 
             #endregion LambdaTree
