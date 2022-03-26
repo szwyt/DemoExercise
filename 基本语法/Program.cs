@@ -83,6 +83,7 @@ namespace 基本语法
 
             {
                 IConsoleTool consoleTool = new LambdaDemo();
+               
                 consoleTool.ConsoleWriteLine();
             }
 

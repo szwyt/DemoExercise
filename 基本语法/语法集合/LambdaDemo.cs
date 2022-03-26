@@ -48,6 +48,9 @@ namespace 基本语法
 
         public void ConsoleWriteLine()
         {
+            string[] words = new string[] { "Able", "was", "I", "ere", "I", "saw", "Elba" };
+            string s = words.Aggregate((a, n) =>$"{a},{n}");
+            Console.WriteLine(s);
             #region Lambda表达式
 
             {
@@ -86,11 +89,14 @@ namespace 基本语法
                 //Console.WriteLine(users.Max(s => s.DateInt));
                 //Console.WriteLine(users.Min(s => s.DateInt));
 
-                var list2 = teachers.SelectMany(t => t.Students).Where(s => s.Score < 60).ToList();
+                var list2 = teachers.SelectMany(t => t.Students).ToList();
+                var list3 = teachers.SelectMany(
+                               t => t.Students,
+                               (t, s) => new { t.Name, s.Score }).ToList();
 
-                foreach (var item in list2)
+                foreach (var item in list3)
                 {
-                    Console.WriteLine(item.Score);
+                    Console.WriteLine($"{item.Name}-->{item.Score}");
                 }
             }
 

@@ -15,10 +15,10 @@ namespace RabbitMQT
                 Port = 5672,
                 UserName = "zhdya",
                 Password = "123456",
-                Protocol = Protocols.DefaultProtocol,
+                //Protocol = Protocols.DefaultProtocol,
                 AutomaticRecoveryEnabled = true, //自动重连
                 RequestedFrameMax = UInt32.MaxValue,
-                RequestedHeartbeat = UInt16.MaxValue //心跳超时时间
+                //RequestedHeartbeat = UInt16.MaxValue //心跳超时时间
             };
             try
             {

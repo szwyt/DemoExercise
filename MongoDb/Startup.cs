@@ -43,8 +43,8 @@ namespace MongoDb
                 options.JsonSerializerOptions.IgnoreNullValues = false;
                 // json传参时日期格式转换
                 options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
-            })
-              .AddRazorRuntimeCompilation();
+            });
+              //.AddRazorRuntimeCompilation();
             services.AddSingleton<IMongoDatabase>(x =>
             {
                 var client = new MongoClient(conStr);

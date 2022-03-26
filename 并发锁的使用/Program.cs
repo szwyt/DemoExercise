@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -94,22 +91,59 @@ namespace 并发锁的使用
     //    }
     //}
 
+    //class Program
+    //{
+    //    static void Main(string[] args)
+    //    {
+    //        C1 c1 = new C1();
+    //        //在t1线程中调用LockMe，并将deadlock设为true（将出现死锁）
+    //        Thread t1 = new Thread(c1.LockMe);
+    //        t1.Start(true);
+    //        Thread.Sleep(100);
+    //        //在主线程中lock c1
+    //        lock (c1)
+    //        {
+    //            //调用没有被lock的方法
+    //            c1.DoNotLockMe();
+    //            //调用被lock的方法，并试图将deadlock解除
+    //            c1.LockMe(false);
+    //        }
+    //    }
+    //}
     class Program
     {
+        private static object obj1 = new object();
+        private static object obj2 = new object();
         static void Main(string[] args)
         {
-            C1 c1 = new C1();
-            //在t1线程中调用LockMe，并将deadlock设为true（将出现死锁）
-            Thread t1 = new Thread(c1.LockMe);
-            t1.Start(true);
-            Thread.Sleep(100);
-            //在主线程中lock c1
-            lock (c1)
+
+            Task.Run(() => Method1());
+            Task.Run(() => Method2());
+            Console.Read();
+        }
+
+        static void Method1()
+        {
+            lock (obj1)
             {
-                //调用没有被lock的方法
-                c1.DoNotLockMe();
-                //调用被lock的方法，并试图将deadlock解除
-                c1.LockMe(false);
+                Console.WriteLine("开始执行方法一");
+                Thread.Sleep(1000);
+                lock (obj2)
+                {
+                    Console.WriteLine("方法一执行完毕");
+                }
+            }
+        }
+        static void Method2()
+        {
+            lock (obj2)
+            {
+                Console.WriteLine("开始执行方法二");
+                Thread.Sleep(1000);
+                lock (obj1)
+                {
+                    Console.WriteLine("方法二执行完毕");
+                }
             }
         }
     }
