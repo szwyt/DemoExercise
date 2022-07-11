@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Linq;
 
 namespace 基本语法
 {
@@ -82,9 +84,9 @@ namespace 基本语法
             #region Lambda表达式
 
             {
-                IConsoleTool consoleTool = new LambdaDemo();
+                //IConsoleTool consoleTool = new 迭代器();
                
-                consoleTool.ConsoleWriteLine();
+                //consoleTool.ConsoleWriteLine();
             }
 
             #endregion Lambda表达式
@@ -106,7 +108,27 @@ namespace 基本语法
             }
 
             #endregion LambdaTree
-           
+
+            //dynamic obj2 = new System.Dynamic.ExpandoObject();
+            //obj2.Name = "金朝钱";
+            //obj2.Age = 31;
+            //obj2.Birthday = DateTime.Now;
+            var data = new
+            {
+                action = "GetProperties",
+                ip = "192.168.1.150",
+                encryp = 0,
+                date = DateTime.Now,
+                model = "cash",
+                sn = "2222",
+                vs = ""
+            };
+            var d = data.GetType().GetProperties()//这一步获取匿名类的公共属性，返回一个数组
+                .OrderBy(q => q.Name)//这一步排序，需要引入System.Linq，当然可以省略
+                //.Where(q => q.Name != "vs")//这一步筛选，也可以省略
+                .ToDictionary(q => q.Name, q => q.GetValue(data));//这一步将数组转换为字典
+            var a = d.GetType().GetProperties();
+            Console.WriteLine(string.Format("json:{0}", JsonConvert.SerializeObject(data)));
             Console.ReadKey();
         }
     }

@@ -65,7 +65,7 @@ namespace 基本语法
                     new Teacher("g",new List<Student>{ new Student(100),new Student(90),new Student(60) })
                 };
                 //List<User> listDistinct1 = users.DistinctLingbug<User, int>(s => s.DateInt).ToList();
-                //List<User> listDistinct2 = users.Distinct(new DistinctCompareModel<User>((u, s) => u.DateInt == s.DateInt || u.DateTimeStr == s.DateTimeStr)).ToList();
+                List<User> listDistinct2 = users.Distinct(new DistinctCompareModel<User>((u, s) => u.DateInt == s.DateInt || u.DateTimeStr == s.DateTimeStr)).ToList();
                 //var list = users.GroupBy(o => new { o.DateInt, o.DateTimeStr });
                 //foreach (var item in list)
                 //{

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MiniRazor" Version="2.2.1" />
+  </ItemGroup>
+  <ItemGroup>
+	<AdditionalFiles Include="Templates/*.cshtml" IsRazorTemplate="true" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Update="Templates\TemplateBar.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AdditionalFiles>
+    <AdditionalFiles Update="Templates\TemplateFoo.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AdditionalFiles>
+  </ItemGroup>
+</Project>

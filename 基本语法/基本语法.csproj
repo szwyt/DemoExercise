@@ -88,6 +88,7 @@
     <Compile Include="语法集合\ReflectDemo.cs" />
     <Compile Include="语法集合\SelectManyDemo.cs" />
     <Compile Include="语法集合\Switch新语法Demo.cs" />
+    <Compile Include="语法集合\迭代器.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
