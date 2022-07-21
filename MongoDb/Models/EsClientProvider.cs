@@ -1,6 +1,8 @@
 ﻿using Elasticsearch.Net;
 using Microsoft.Extensions.Options;
 using Nest;
+using System;
+using System.Linq;
 
 namespace MongoDb.Models
 {

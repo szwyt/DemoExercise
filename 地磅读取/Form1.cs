@@ -27,22 +27,22 @@ namespace 地磅读取
             //});
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private async void timer1_Tick(object sender, EventArgs e)
         {
-            PlayDingDong($"负差偏高,重量{NumberToChinese("3520")}");
+            //PlayDingDong($"负差偏高,重量{NumberToChinese("3520")}");
+            await GetIdAsync();
         }
 
-        public Task GetIdAsync()
+        public async Task GetIdAsync()
         {
-            return Task.Run(() =>
-            {
-                WebClient webClient = new WebClient();
-                string html = webClient.DownloadString("http://www.baidu.com");
-                this.BeginInvoke(new Action(() =>
-                {
-                    this.label1.Text = html;
-                }));
-            });
+
+            WebClient webClient = new WebClient();
+            string html = await webClient.DownloadStringTaskAsync("http://www.baidu.com");
+            //this.BeginInvoke(new Action(() =>
+            //{
+            //    this.label1.Text = html;
+            //}));
+            this.label1.Text = html;
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace 地磅读取
             SpVoice sp = new SpVoice();
             //播放音频文件
             SpFileStream ss = new SpFileStream();
-            ss.Open($"{ AppDomain.CurrentDomain.BaseDirectory + "Resources/901095.wav"}", SpeechStreamFileMode.SSFMOpenForRead, true);
+            ss.Open($"{AppDomain.CurrentDomain.BaseDirectory + "Resources/901095.wav"}", SpeechStreamFileMode.SSFMOpenForRead, true);
             var stream = ss as ISpeechBaseStream;
             sp.SpeakStream(stream, SpeechVoiceSpeakFlags.SVSFIsFilename);
             ss.Close();

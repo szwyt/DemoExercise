@@ -4,8 +4,6 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using MiniRazor;
-using RazorEngineDemo.Templates;
-namespace RazorEngineDemo;
 class Program
 {
     public static async Task Main()
