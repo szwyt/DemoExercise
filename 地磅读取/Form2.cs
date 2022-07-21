@@ -63,15 +63,41 @@ namespace 地磅读取
                                 {
                                     string fileName = $"Files/{j}.Png";
                                     string outputFile = $"{AppContext.BaseDirectory}/{fileName}";
+                                    //第1种
+                                    //var buffer = await result.BufferAsync();
+                                    //if (buffer.Length < 20 * 1024)
+                                    //{
+                                    //    await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
+                                    //    {
+                                    //        Type = ScreenshotType.Png,
+                                    //        FullPage = true,
+                                    //    });
+                                    //    Console.WriteLine($"{j}----------------->{DateTime.Now}----------------->" + outputFile);
+                                    //}
+                                    //else
+                                    //    Console.WriteLine($"{j}----------------->{DateTime.Now}----------------->" + "buffer is big data");
 
-                                    var buffer = await result.BufferAsync();
+                                    ////第2种
+                                    //using (var stream = await page.ScreenshotStreamAsync(new ScreenshotOptions { FullPage = false }))
+                                    //{
+
+                                    //    byte[] srcBuf = new Byte[stream.Length];
+                                    //    stream.Read(srcBuf, 0, srcBuf.Length);
+                                    //    stream.Seek(0, SeekOrigin.Begin);
+                                    //    using (FileStream fs = new FileStream($"{outputFile}", FileMode.Create, FileAccess.Write))
+                                    //    {
+                                    //        fs.Write(srcBuf, 0, srcBuf.Length);
+                                    //    }
+                                    //}
+
+                                    //第3种
+                                    var buffer = await page.ScreenshotDataAsync(new ScreenshotOptions { Type = ScreenshotType.Png, FullPage = true });
                                     if (buffer.Length < 20 * 1024)
                                     {
-                                        await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
+                                        using (FileStream fs = new FileStream($"{outputFile}", FileMode.Create, FileAccess.Write))
                                         {
-                                            Type = ScreenshotType.Png,
-                                            FullPage = true,
-                                        });
+                                            fs.Write(buffer, 0, buffer.Length);
+                                        }
                                         Console.WriteLine($"{j}----------------->{DateTime.Now}----------------->" + outputFile);
                                     }
                                     else
