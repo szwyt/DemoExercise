@@ -65,7 +65,7 @@ namespace 地磅读取
                                     string outputFile = $"{AppContext.BaseDirectory}/{fileName}";
 
                                     var buffer = await result.BufferAsync();
-                                    if (buffer.Length < 10 * 1024)
+                                    if (buffer.Length < 20 * 1024)
                                     {
                                         await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
                                         {
