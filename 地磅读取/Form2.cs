@@ -35,6 +35,10 @@ namespace 地磅读取
             var list = File.ReadAllLines($"{Path.Combine(AppContext.BaseDirectory, "siteurl.txt")}");
             await Task.Run(async () =>
             {
+                int success = 0;
+                int error = 0;
+                int bigdata = 0;
+                int noimage = 0;
                 for (int i = 0; i < list.Count(); i++)
                 {
 
@@ -49,7 +53,6 @@ namespace 地磅读取
                         {
                             using (var page = await browser.NewPageAsync())
                             {
-
                                 await page.SetViewportAsync(new ViewPortOptions
                                 {
                                     Width = 1920,
@@ -64,18 +67,18 @@ namespace 地磅读取
                                     string fileName = $"Files/{j}.Png";
                                     string outputFile = $"{AppContext.BaseDirectory}/{fileName}";
                                     //第1种
-                                    //var buffer = await result.BufferAsync();
-                                    //if (buffer.Length < 20 * 1024)
-                                    //{
-                                    //    await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
-                                    //    {
-                                    //        Type = ScreenshotType.Png,
-                                    //        FullPage = true,
-                                    //    });
-                                    //    Console.WriteLine($"{j}----------------->{DateTime.Now}----------------->" + outputFile);
-                                    //}
-                                    //else
-                                    //    Console.WriteLine($"{j}----------------->{DateTime.Now}----------------->" + "buffer is big data");
+                                    var buffer = await result.BufferAsync();
+                                    if (buffer.Length < 30 * 1024)
+                                    {
+                                        await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
+                                        {
+                                            Type = ScreenshotType.Png,
+                                            FullPage = true,
+                                        });
+                                        Console.WriteLine($"{j}------->{DateTime.Now}------->{outputFile}------->成功数：{success++}");
+                                    }
+                                    else
+                                        Console.WriteLine($"{j}------->{DateTime.Now}------->buffer is big data------->bigdata数：{bigdata}");
 
                                     ////第2种
                                     //using (var stream = await page.ScreenshotStreamAsync(new ScreenshotOptions { FullPage = false }))
@@ -91,30 +94,29 @@ namespace 地磅读取
                                     //}
 
                                     //第3种
-                                    var buffer = await page.ScreenshotDataAsync(new ScreenshotOptions { Type = ScreenshotType.Png, FullPage = true });
-                                    if (buffer.Length < 20 * 1024)
-                                    {
-                                        using (FileStream fs = new FileStream($"{outputFile}", FileMode.Create, FileAccess.Write))
-                                        {
-                                            fs.Write(buffer, 0, buffer.Length);
-                                        }
-                                        Console.WriteLine($"{j}----------------->{DateTime.Now}----------------->" + outputFile);
-                                    }
-                                    else
-                                        Console.WriteLine($"{j}----------------->{DateTime.Now}----------------->" + "buffer is big data");
+                                    //var buffer = await page.ScreenshotDataAsync(new ScreenshotOptions { Type = ScreenshotType.Png, FullPage = true });
+                                    //if (buffer.Length < 20 * 1024)
+                                    //{
+                                    //    using (FileStream fs = new FileStream($"{outputFile}", FileMode.Create, FileAccess.Write))
+                                    //    {
+                                    //        fs.Write(buffer, 0, buffer.Length);
+                                    //    }
+                                    //    Console.WriteLine($"{j}----------------->{DateTime.Now}----------------->" + outputFile);
+                                    //}
+                                    //else
+                                    //    Console.WriteLine($"{j}----------------->{DateTime.Now}----------------->" + "buffer is big data");
                                 }
                                 else
                                 {
-                                    Console.WriteLine($"{j}----------------->{DateTime.Now}----------------->" + "没有生成图片");
+                                    Console.WriteLine($"{j}------->{DateTime.Now}------->no generate image------->noimages数：{noimage}");
                                 }
-                                await page.DisposeAsync();
                             }
                         }
                     }
                     catch (Exception ex)
                     {
                         var k = i + 1;
-                        Console.WriteLine($"{k}----------------->{DateTime.Now}----------------->" + $"error:{ex.Message}");
+                        Console.WriteLine($"{k}------->{DateTime.Now}------->error:{ex.Message}------->异常数：{error}");
                     }
                 }
             });
