@@ -35,11 +35,11 @@ namespace 地磅读取
             var list = File.ReadAllLines($"{Path.Combine(AppContext.BaseDirectory, "siteurl.txt")}");
             await Task.Run(async () =>
             {
-                int success = 0;
-                int error = 0;
-                int bigdata = 0;
-                int noimage = 0;
-                for (int i = 0; i < list.Count(); i++)
+                int success = 1;
+                int error = 1;
+                int bigdata = 1;
+                int noimage = 1;
+                for (int i = 1; i < list.Count(); i++)
                 {
 
                     try
