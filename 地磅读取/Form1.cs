@@ -1,8 +1,10 @@
 ﻿using SpeechLib;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Speech.Synthesis;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -25,6 +27,7 @@ namespace 地磅读取
             //        //Thread.Sleep(10000);
             //    }
             //});
+
         }
 
         private async void timer1_Tick(object sender, EventArgs e)
@@ -106,8 +109,14 @@ namespace 地磅读取
 
         private void button1_Click(object sender, EventArgs e)
         {
-            label1.Text = textBox1.Text;
-            label2.Text = textBox2.Text;
+            //throw new Exception("111");
+
+            //创建一个Thread类的实例
+            Thread t = new Thread(new ThreadStart(() =>
+            {
+                throw new Exception("test exception");
+            }));
+            t.Start();//启动线程，在线程t中执行PrintNumber
         }
     }
 }
