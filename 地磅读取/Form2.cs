@@ -60,7 +60,7 @@ namespace 地磅读取
                                 });
                                 var item = list[i];
                                 var result = await page.GoToAsync($"{item}");
-                                await page.WaitForTimeoutAsync(3000);
+                                await page.WaitForTimeoutAsync(2000);
                                 int j = i + 1;
                                 if (result != null && result.Status == System.Net.HttpStatusCode.OK)
                                 {
@@ -68,7 +68,8 @@ namespace 地磅读取
                                     string outputFile = $"{AppContext.BaseDirectory}/{fileName}";
                                     //第1种
                                     var buffer = await result.BufferAsync();
-                                    if (buffer.Length < 30 * 1024)
+                                    // 网站超过100M直接不生成图片，不然影响效率
+                                    if (buffer.Length < 100 * 1024)
                                     {
                                         await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
                                         {
