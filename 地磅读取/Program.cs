@@ -24,7 +24,7 @@ namespace 地磅读取
                 #region 应用程序的主入口点
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Form1());
+                Application.Run(new Form2());
                 #endregion
             }
             catch (Exception ex)
