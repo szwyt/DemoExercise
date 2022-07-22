@@ -78,7 +78,7 @@ namespace 地磅读取
                                         Console.WriteLine($"{j}------->{DateTime.Now}------->{outputFile}------->成功数：{success++}");
                                     }
                                     else
-                                        Console.WriteLine($"{j}------->{DateTime.Now}------->buffer is big data------->bigdata数：{bigdata}");
+                                        Console.WriteLine($"{j}------->{DateTime.Now}------->buffer is big data------->bigdata数：{bigdata++}");
 
                                     ////第2种
                                     //using (var stream = await page.ScreenshotStreamAsync(new ScreenshotOptions { FullPage = false }))
@@ -108,7 +108,7 @@ namespace 地磅读取
                                 }
                                 else
                                 {
-                                    Console.WriteLine($"{j}------->{DateTime.Now}------->no generate image------->noimages数：{noimage}");
+                                    Console.WriteLine($"{j}------->{DateTime.Now}------->no generate image------->noimages数：{noimage++}");
                                 }
                             }
                         }
@@ -116,7 +116,7 @@ namespace 地磅读取
                     catch (Exception ex)
                     {
                         var k = i + 1;
-                        Console.WriteLine($"{k}------->{DateTime.Now}------->error:{ex.Message}------->异常数：{error}");
+                        Console.WriteLine($"{k}------->{DateTime.Now}------->error:{ex.Message}------->异常数：{error++}");
                     }
                 }
             });
