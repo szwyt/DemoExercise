@@ -39,7 +39,7 @@ namespace 地磅读取
                 int error = 1;
                 int bigdata = 1;
                 int noimage = 1;
-                for (int i = 1; i < list.Count(); i++)
+                for (int i = 0; i < list.Count(); i++)
                 {
 
                     try
@@ -60,7 +60,7 @@ namespace 地磅读取
                                 });
                                 var item = list[i];
                                 var result = await page.GoToAsync($"{item}");
-                                await page.WaitForTimeoutAsync(2000);
+                                await page.WaitForTimeoutAsync(2500);
                                 int j = i + 1;
                                 if (result != null && result.Status == System.Net.HttpStatusCode.OK)
                                 {
