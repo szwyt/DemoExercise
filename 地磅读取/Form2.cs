@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,34 +15,34 @@ namespace 地磅读取
 {
     public partial class Form2 : Form
     {
+        private Thread thread;
         public Form2()
         {
             InitializeComponent();
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            string chromePath = Path.Combine(AppContext.BaseDirectory, ".local-chromium", "Win64-970485", "chrome-win");
-            // 如果不存在chrome就下载一个
-            if (!Directory.Exists(chromePath))
+            thread = new Thread(new ThreadStart(() =>
             {
-                using (var browserFetcher = new BrowserFetcher())
+                string chromePath = Path.Combine(AppContext.BaseDirectory, ".local-chromium", "Win64-970485", "chrome-win");
+                // 如果不存在chrome就下载一个
+                if (!Directory.Exists(chromePath))
                 {
-                    await browserFetcher.DownloadAsync();
-                };
+                    using (var browserFetcher = new BrowserFetcher())
+                    {
+                        _ = browserFetcher.DownloadAsync();
+                    };
 
-            }
+                }
 
-            var list = File.ReadAllLines($"{Path.Combine(AppContext.BaseDirectory, "siteurl.txt")}");
-            await Task.Run(async () =>
-            {
+                var list = File.ReadAllLines($"{Path.Combine(AppContext.BaseDirectory, "siteurl.txt")}");
                 int success = 1;
                 int error = 1;
                 int bigdata = 1;
                 int noimage = 1;
                 for (int i = 0; i < list.Count(); i++)
                 {
-
                     try
                     {
                         var launch = new LaunchOptions
@@ -49,29 +50,29 @@ namespace 地磅读取
                             Headless = true,
                             ExecutablePath = Path.Combine(chromePath, "chrome.exe")
                         };
-                        using (var browser = await Puppeteer.LaunchAsync(launch))
+                        using (var browser = Puppeteer.LaunchAsync(launch).Result)
                         {
-                            using (var page = await browser.NewPageAsync())
+                            using (var page = browser.NewPageAsync().Result)
                             {
-                                await page.SetViewportAsync(new ViewPortOptions
+                                _ = page.SetViewportAsync(new ViewPortOptions
                                 {
                                     Width = 1920,
                                     Height = 1080,
                                 });
                                 var item = list[i];
-                                var result = await page.GoToAsync($"{item}");
-                                await page.WaitForTimeoutAsync(2500);
+                                var result = page.GoToAsync($"{item}").Result;
+                                _ = page.WaitForTimeoutAsync(1500);
                                 int j = i + 1;
                                 if (result != null && result.Status == System.Net.HttpStatusCode.OK)
                                 {
                                     string fileName = $"Files/{j}.Png";
                                     string outputFile = $"{AppContext.BaseDirectory}/{fileName}";
                                     //第1种
-                                    var buffer = await result.BufferAsync();
+                                    var buffer = result.BufferAsync().Result;
                                     // 网站超过100M直接不生成图片，不然影响效率
                                     if (buffer.Length < 100 * 1024)
                                     {
-                                        await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
+                                        _ = page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
                                         {
                                             Type = ScreenshotType.Png,
                                             FullPage = true,
@@ -120,7 +121,9 @@ namespace 地磅读取
                         Console.WriteLine($"{k}------->{DateTime.Now}------->error:{ex.Message}------->异常数：{error++}");
                     }
                 }
-            });
+            }));
+            thread.Start();
+            thread.IsBackground = true;
         }
     }
 }
