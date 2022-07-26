@@ -69,20 +69,12 @@ namespace 地磅读取
                                     {
                                         string fileName = $"Files/{j}.Png";
                                         string outputFile = $"{AppContext.BaseDirectory}/{fileName}";
-                                        //第1种
-                                        var buffer = result.BufferAsync().Result;
-                                        // 网站超过100M直接不生成图片，不然影响效率
-                                        if (buffer.Length < 100 * 1024)
+                                        await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
                                         {
-                                            await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
-                                            {
-                                                Type = ScreenshotType.Png,
-                                                FullPage = true,
-                                            });
-                                            Console.WriteLine($"{j}------->{DateTime.Now}------->{outputFile}------->成功数：{success++}");
-                                        }
-                                        else
-                                            Console.WriteLine($"{j}------->{DateTime.Now}------->buffer is big data------->bigdata数：{bigdata++}");
+                                            Type = ScreenshotType.Png,
+                                            FullPage = true,
+                                        });
+                                        Console.WriteLine($"{j}------->{DateTime.Now}------->{outputFile}------->成功数：{success++}");
 
                                         ////第2种
                                         //using (var stream = await page.ScreenshotStreamAsync(new ScreenshotOptions { FullPage = false }))
