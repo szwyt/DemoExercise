@@ -27,26 +27,26 @@ namespace 地磅读取
 
             thread = new Thread(new ThreadStart(async () =>
             {
-                int error = 1;
-                int j = 0;
-                try
+                string chromePath = Path.Combine(AppContext.BaseDirectory, ".local-chromium", "Win64-970485", "chrome-win");
+                // 如果不存在chrome就下载一个
+                if (!Directory.Exists(chromePath))
                 {
-                    string chromePath = Path.Combine(AppContext.BaseDirectory, ".local-chromium", "Win64-970485", "chrome-win");
-                    // 如果不存在chrome就下载一个
-                    if (!Directory.Exists(chromePath))
+                    using (var browserFetcher = new BrowserFetcher())
                     {
-                        using (var browserFetcher = new BrowserFetcher())
-                        {
-                            await browserFetcher.DownloadAsync();
-                        };
+                        await browserFetcher.DownloadAsync();
+                    };
+                }
 
-                    }
-
-                    var list = File.ReadAllLines($"{Path.Combine(AppContext.BaseDirectory, "siteurl.txt")}");
-                    int success = 1;
-                    int noimage = 1;
-                    for (int i = 0; i < list.Count(); i++)
+                var list = File.ReadAllLines($"{Path.Combine(AppContext.BaseDirectory, "siteurl.txt")}");
+                int success = 1;
+                int noimage = 1;
+                for (int i = 0; i < list.Count(); i++)
+                {
+                    int error = 1;
+                    int j = 0;
+                    try
                     {
+
                         j = i + 1;
                         var launch = new LaunchOptions
                         {
@@ -109,12 +109,11 @@ namespace 地磅读取
                                 }
                             }
                         }
-
                     }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"第{j}条数据------->{DateTime.Now}------->error:{ex.Message}------->异常数：{error++}");
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"第{j}条数据------->{DateTime.Now}------->error:{ex.Message}------->异常数：{error++}");
+                    }
                 }
 
             }));
