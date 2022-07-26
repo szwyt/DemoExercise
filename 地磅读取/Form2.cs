@@ -41,10 +41,11 @@ namespace 地磅读取
                     var list = File.ReadAllLines($"{Path.Combine(AppContext.BaseDirectory, "siteurl.txt")}");
                     int success = 1;
                     int error = 1;
-                    int bigdata = 1;
                     int noimage = 1;
                     for (int i = 0; i < list.Count(); i++)
                     {
+                        int j = i + 1;
+                        Console.WriteLine($"第{j}条数据------->{DateTime.Now}");
                         try
                         {
                             var launch = new LaunchOptions
@@ -62,9 +63,9 @@ namespace 地磅读取
                                         Height = 1080,
                                     });
                                     var item = list[i];
-                                    var result =await page.GoToAsync($"{item}");
+                                    var result = await page.GoToAsync($"{item}");
                                     await page.WaitForTimeoutAsync(1500);
-                                    int j = i + 1;
+
                                     if (result != null && result.Status == System.Net.HttpStatusCode.OK)
                                     {
                                         string fileName = $"Files/{j}.Png";
