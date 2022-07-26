@@ -23,29 +23,31 @@ namespace 地磅读取
 
         private void button1_Click(object sender, EventArgs e)
         {
+            thread?.Abort();
+
             thread = new Thread(new ThreadStart(async () =>
             {
-                string chromePath = Path.Combine(AppContext.BaseDirectory, ".local-chromium", "Win64-970485", "chrome-win");
-                // 如果不存在chrome就下载一个
-                if (!Directory.Exists(chromePath))
-                {
-                    using (var browserFetcher = new BrowserFetcher())
-                    {
-                        await browserFetcher.DownloadAsync();
-                    };
-
-                }
-
-                var list = File.ReadAllLines($"{Path.Combine(AppContext.BaseDirectory, "siteurl.txt")}");
-                int success = 1;
                 int error = 1;
-                int noimage = 1;
-                for (int i = 0; i < list.Count(); i++)
+                int j = 0;
+                try
                 {
-                    int j = i + 1;
-                    Console.WriteLine($"第{j}条数据------->{DateTime.Now}");
-                    try
+                    string chromePath = Path.Combine(AppContext.BaseDirectory, ".local-chromium", "Win64-970485", "chrome-win");
+                    // 如果不存在chrome就下载一个
+                    if (!Directory.Exists(chromePath))
                     {
+                        using (var browserFetcher = new BrowserFetcher())
+                        {
+                            await browserFetcher.DownloadAsync();
+                        };
+
+                    }
+
+                    var list = File.ReadAllLines($"{Path.Combine(AppContext.BaseDirectory, "siteurl.txt")}");
+                    int success = 1;
+                    int noimage = 1;
+                    for (int i = 0; i < list.Count(); i++)
+                    {
+                        j = i + 1;
                         var launch = new LaunchOptions
                         {
                             Headless = true,
@@ -73,7 +75,7 @@ namespace 地磅读取
                                         Type = ScreenshotType.Png,
                                         FullPage = true,
                                     });
-                                    Console.WriteLine($"{j}------->{DateTime.Now}------->{outputFile}------->成功数：{success++}");
+                                    Console.WriteLine($"第{j}条数据------->{DateTime.Now}------->{outputFile}------->成功数：{success++}");
 
                                     ////第2种
                                     //using (var stream = await page.ScreenshotStreamAsync(new ScreenshotOptions { FullPage = false }))
@@ -103,17 +105,18 @@ namespace 地磅读取
                                 }
                                 else
                                 {
-                                    Console.WriteLine($"{j}------->{DateTime.Now}------->no generate image------->noimages数：{noimage++}");
+                                    Console.WriteLine($"第{j}条数据------->{DateTime.Now}------->no generate image------->noimages数：{noimage++}");
                                 }
                             }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        var k = i + 1;
-                        Console.WriteLine($"{k}------->{DateTime.Now}------->error:{ex.Message}------->异常数：{error++}");
+
                     }
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"第{j}条数据------->{DateTime.Now}------->error:{ex.Message}------->异常数：{error++}");
+                }
+
             }));
             thread.IsBackground = true;
             thread.Start();
