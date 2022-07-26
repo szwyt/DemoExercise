@@ -56,13 +56,13 @@ namespace 地磅读取
                             {
                                 using (var page = await browser.NewPageAsync())
                                 {
-                                    _ = page.SetViewportAsync(new ViewPortOptions
+                                    await page.SetViewportAsync(new ViewPortOptions
                                     {
                                         Width = 1920,
                                         Height = 1080,
                                     });
                                     var item = list[i];
-                                    var result = page.GoToAsync($"{item}").Result;
+                                    var result =await page.GoToAsync($"{item}");
                                     await page.WaitForTimeoutAsync(1500);
                                     int j = i + 1;
                                     if (result != null && result.Status == System.Net.HttpStatusCode.OK)
@@ -125,8 +125,8 @@ namespace 地磅读取
                     }
                 });
             }));
-            thread.Start();
             thread.IsBackground = true;
+            thread.Start();
         }
 
         private async void button2_Click(object sender, EventArgs e)
