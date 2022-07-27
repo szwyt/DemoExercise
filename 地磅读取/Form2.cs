@@ -81,7 +81,7 @@ namespace 地磅读取
                                     Process[] ps = Process.GetProcesses();
                                     foreach (Process p in ps)
                                     {
-                                        if (p.ProcessName.ToLower().Contains("chrome") || p.ProcessName.ToLower().Contains("Chromium"))//判断进程名称
+                                        if (p.ProcessName.ToLower().Contains("chrome2") || p.ProcessName.ToLower().Contains("Chromium"))//判断进程名称
                                         {
                                             p.Kill();//停止进程
                                         }
