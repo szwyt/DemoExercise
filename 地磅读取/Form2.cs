@@ -40,77 +40,83 @@ namespace 地磅读取
                 int success = 1;
                 int error = 1;
                 int noimage = 1;
+                var launch = new LaunchOptions
+                {
+                    Headless = true,
+                    ExecutablePath = Path.Combine(chromePath, "chrome.exe")
+                };
+
+                var browser = await Puppeteer.LaunchAsync(launch);
                 for (int i = 0; i < list.Count(); i++)
                 {
                     await Task.Delay(100);
                     int j = i + 1;
                     try
                     {
-                        var launch = new LaunchOptions
+                        browser = await Puppeteer.LaunchAsync(launch);
+                        var page = await browser.NewPageAsync();
+                        await page.SetViewportAsync(new ViewPortOptions
                         {
-                            Headless = true,
-                            ExecutablePath = Path.Combine(chromePath, "chrome.exe")
-                        };
-                        using (var browser = await Puppeteer.LaunchAsync(launch))
+                            Width = 1920,
+                            Height = 1080,
+                        });
+                        var item = list[i];
+                        var result = await page.GoToAsync($"{item}");
+
+                        await page.WaitForTimeoutAsync(1000);
+
+                        if (result != null && result.Status == System.Net.HttpStatusCode.OK)
                         {
-                            using (var page = await browser.NewPageAsync())
+                            string fileName = $"Files/{j}.Png";
+                            string outputFile = $"{AppContext.BaseDirectory}/{fileName}";
+                            await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
                             {
-                                await page.SetViewportAsync(new ViewPortOptions
-                                {
-                                    Width = 1920,
-                                    Height = 1080,
-                                });
-                                var item = list[i];
-                                var result = await page.GoToAsync($"{item}");
-                                await page.WaitForTimeoutAsync(1000);
+                                Type = ScreenshotType.Png,
+                                FullPage = true,
+                            });
+                            Console.WriteLine($"第{j}条数据------->{DateTime.Now}------->{outputFile}------->成功数：{success++}");
 
-                                if (result != null && result.Status == System.Net.HttpStatusCode.OK)
-                                {
-                                    string fileName = $"Files/{j}.Png";
-                                    string outputFile = $"{AppContext.BaseDirectory}/{fileName}";
-                                    await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
-                                    {
-                                        Type = ScreenshotType.Png,
-                                        FullPage = true,
-                                    });
-                                    Console.WriteLine($"第{j}条数据------->{DateTime.Now}------->{outputFile}------->成功数：{success++}");
+                            ////第2种
+                            //using (var stream = await page.ScreenshotStreamAsync(new ScreenshotOptions { FullPage = false }))
+                            //{
 
-                                    ////第2种
-                                    //using (var stream = await page.ScreenshotStreamAsync(new ScreenshotOptions { FullPage = false }))
-                                    //{
+                            //    byte[] srcBuf = new Byte[stream.Length];
+                            //    stream.Read(srcBuf, 0, srcBuf.Length);
+                            //    stream.Seek(0, SeekOrigin.Begin);
+                            //    using (FileStream fs = new FileStream($"{outputFile}", FileMode.Create, FileAccess.Write))
+                            //    {
+                            //        fs.Write(srcBuf, 0, srcBuf.Length);
+                            //    }
+                            //}
 
-                                    //    byte[] srcBuf = new Byte[stream.Length];
-                                    //    stream.Read(srcBuf, 0, srcBuf.Length);
-                                    //    stream.Seek(0, SeekOrigin.Begin);
-                                    //    using (FileStream fs = new FileStream($"{outputFile}", FileMode.Create, FileAccess.Write))
-                                    //    {
-                                    //        fs.Write(srcBuf, 0, srcBuf.Length);
-                                    //    }
-                                    //}
-
-                                    //第3种
-                                    //var buffer = await page.ScreenshotDataAsync(new ScreenshotOptions { Type = ScreenshotType.Png, FullPage = true });
-                                    //if (buffer.Length < 20 * 1024)
-                                    //{
-                                    //    using (FileStream fs = new FileStream($"{outputFile}", FileMode.Create, FileAccess.Write))
-                                    //    {
-                                    //        fs.Write(buffer, 0, buffer.Length);
-                                    //    }
-                                    //    Console.WriteLine($"{j}----------------->{DateTime.Now}----------------->" + outputFile);
-                                    //}
-                                    //else
-                                    //    Console.WriteLine($"{j}----------------->{DateTime.Now}----------------->" + "buffer is big data");
-                                }
-                                else
-                                {
-                                    Console.WriteLine($"第{j}条数据------->{DateTime.Now}------->no generate image------->noimages数：{noimage++}");
-                                }
-                            }
+                            //第3种
+                            //var buffer = await page.ScreenshotDataAsync(new ScreenshotOptions { Type = ScreenshotType.Png, FullPage = true });
+                            //if (buffer.Length < 20 * 1024)
+                            //{
+                            //    using (FileStream fs = new FileStream($"{outputFile}", FileMode.Create, FileAccess.Write))
+                            //    {
+                            //        fs.Write(buffer, 0, buffer.Length);
+                            //    }
+                            //    Console.WriteLine($"{j}----------------->{DateTime.Now}----------------->" + outputFile);
+                            //}
+                            //else
+                            //    Console.WriteLine($"{j}----------------->{DateTime.Now}----------------->" + "buffer is big data");
                         }
-                    }
+                        else
+                        {
+                            Console.WriteLine($"第{j}条数据------->{DateTime.Now}------->no generate image------->noimages数：{noimage++}");
+                        }
 
+                        await page.DisposeAsync();
+                        await page.CloseAsync();
+                       
+                        await browser.DisposeAsync();
+                        await browser.CloseAsync();
+                    }
                     catch (Exception ex)
                     {
+                        await browser.DisposeAsync();
+                        await browser.CloseAsync();
                         Console.WriteLine($"第{j}条数据------->{DateTime.Now}------->error:{ex.Message}------->异常数：{error++}");
                     }
                 }
@@ -170,7 +176,6 @@ namespace 地磅读取
                             FullPage = true,
                         });
                     }
-
                 }
             }
         }
