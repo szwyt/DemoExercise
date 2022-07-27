@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -35,24 +36,26 @@ namespace 地磅读取
                     {
                         await browserFetcher.DownloadAsync();
                     };
+
                 }
 
                 var list = File.ReadAllLines($"{Path.Combine(AppContext.BaseDirectory, "siteurl.txt")}");
                 int success = 1;
+                int error = 1;
                 int noimage = 1;
+                var launch = new LaunchOptions
+                {
+                    Headless = true,
+                    ExecutablePath = Path.Combine(chromePath, "chrome2.exe"),
+                    Timeout = 15000
+                };
+               
                 for (int i = 0; i < list.Count(); i++)
                 {
-                    int error = 1;
-                    int j = 0;
+                    await Task.Delay(100);
+                    int j = i + 1;
                     try
                     {
-
-                        j = i + 1;
-                        var launch = new LaunchOptions
-                        {
-                            Headless = true,
-                            ExecutablePath = Path.Combine(chromePath, "chrome.exe")
-                        };
                         using (var browser = await Puppeteer.LaunchAsync(launch))
                         {
                             using (var page = await browser.NewPageAsync())
@@ -64,7 +67,8 @@ namespace 地磅读取
                                 });
                                 var item = list[i];
                                 var result = await page.GoToAsync($"{item}");
-                                await page.WaitForTimeoutAsync(1500);
+
+                                await page.WaitForTimeoutAsync(1000);
 
                                 if (result != null && result.Status == System.Net.HttpStatusCode.OK)
                                 {
@@ -75,6 +79,16 @@ namespace 地磅读取
                                         Type = ScreenshotType.Png,
                                         FullPage = true,
                                     });
+
+                                    Process[] ps = Process.GetProcesses();
+                                    foreach (Process p in ps)
+                                    {
+                                        if (p.ProcessName.ToLower().Contains("chrome2") || p.ProcessName.ToLower().Contains("Chromium"))//判断进程名称
+                                        {
+                                            p.Kill();//停止进程
+                                        }
+                                    }
+
                                     Console.WriteLine($"第{j}条数据------->{DateTime.Now}------->{outputFile}------->成功数：{success++}");
 
                                     ////第2种
@@ -155,15 +169,23 @@ namespace 地磅读取
                     //li#ch_xxgg
                     if (!string.IsNullOrWhiteSpace(this.textBox2.Text))
                     {
-                        await page.ClickAsync($"{this.textBox2.Text}");
+                        //await page.ClickAsync($"{this.textBox2.Text}");
+
+                        //var clickReviews = "document.querySelectorAll('span.title-s')[2].click();";
+                        await page.EvaluateExpressionAsync($"{this.textBox2.Text}");
+
+                        //var reviews = "Array.from(document.querySelectorAll('.comments-content'));";
+                        //var review = await page.EvaluateExpressionAsync(reviews);
+                        //Console.WriteLine(review);
                     }
                     //var a= await page.EvaluateFunctionAsync<int>($@"() => {{
                     //    return $('#{this.textBox2.Text}').length;
                     // }}");
+
                     await page.WaitForTimeoutAsync(1500);
                     if (result != null && result.Status == System.Net.HttpStatusCode.OK)
                     {
-                        string fileName = $"Files/{1}.Png";
+                        string fileName = $"Files/{DateTime.Now.ToString("yyyyMMddHHmmss")}.Png";
                         string outputFile = $"{AppContext.BaseDirectory}/{fileName}";
                         await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
                         {
@@ -171,7 +193,6 @@ namespace 地磅读取
                             FullPage = true,
                         });
                     }
-
                 }
             }
         }
