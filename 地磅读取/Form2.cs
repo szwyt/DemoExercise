@@ -44,7 +44,6 @@ namespace 地磅读取
                 {
                     await Task.Delay(100);
                     int j = i + 1;
-                    Console.WriteLine($"------->{DateTime.Now}");
                     try
                     {
                         var launch = new LaunchOptions
