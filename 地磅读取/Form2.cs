@@ -43,7 +43,8 @@ namespace 地磅读取
                 var launch = new LaunchOptions
                 {
                     Headless = true,
-                    ExecutablePath = Path.Combine(chromePath, "chrome.exe")
+                    ExecutablePath = Path.Combine(chromePath, "chrome.exe"),
+                    Timeout = 10000
                 };
 
                 var browser = await Puppeteer.LaunchAsync(launch);
