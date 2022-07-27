@@ -167,15 +167,23 @@ namespace 地磅读取
                     //li#ch_xxgg
                     if (!string.IsNullOrWhiteSpace(this.textBox2.Text))
                     {
-                        await page.ClickAsync($"{this.textBox2.Text}");
+                        //await page.ClickAsync($"{this.textBox2.Text}");
+
+                        //var clickReviews = "document.querySelectorAll('span.title-s')[2].click();";
+                        await page.EvaluateExpressionAsync($"{this.textBox2.Text}");
+
+                        //var reviews = "Array.from(document.querySelectorAll('.comments-content'));";
+                        //var review = await page.EvaluateExpressionAsync(reviews);
+                        //Console.WriteLine(review);
                     }
                     //var a= await page.EvaluateFunctionAsync<int>($@"() => {{
                     //    return $('#{this.textBox2.Text}').length;
                     // }}");
+
                     await page.WaitForTimeoutAsync(1500);
                     if (result != null && result.Status == System.Net.HttpStatusCode.OK)
                     {
-                        string fileName = $"Files/{1}.Png";
+                        string fileName = $"Files/{DateTime.Now.ToString("yyyyMMddHHmmss")}.Png";
                         string outputFile = $"{AppContext.BaseDirectory}/{fileName}";
                         await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
                         {
