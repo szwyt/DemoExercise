@@ -44,8 +44,8 @@ namespace 地磅读取
                 var launch = new LaunchOptions
                 {
                     Headless = true,
-                    ExecutablePath = Path.Combine(chromePath, "chrome.exe"),
-                    Timeout = 5000
+                    ExecutablePath = Path.Combine(chromePath, "chrome2.exe"),
+                    Timeout = 15000
                 };
                
                 for (int i = 0; i < list.Count(); i++)
