@@ -52,7 +52,8 @@ namespace 地磅读取
                
                 for (int i = 0; i < list.Count(); i++)
                 {
-                    await Task.Delay(100);
+                    Console.WriteLine($"线程运行状态：{Thread.CurrentThread.IsAlive}");
+                    Thread.Sleep(1000);
                     int j = i + 1;
                     try
                     {
@@ -79,15 +80,6 @@ namespace 地磅读取
                                         Type = ScreenshotType.Png,
                                         FullPage = true,
                                     });
-
-                                    Process[] ps = Process.GetProcesses();
-                                    foreach (Process p in ps)
-                                    {
-                                        if (p.ProcessName.ToLower().Contains("chrome2") || p.ProcessName.ToLower().Contains("Chromium"))//判断进程名称
-                                        {
-                                            p.Kill();//停止进程
-                                        }
-                                    }
 
                                     Console.WriteLine($"第{j}条数据------->{DateTime.Now}------->{outputFile}------->成功数：{success++}");
 
