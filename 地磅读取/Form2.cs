@@ -49,11 +49,11 @@ namespace 地磅读取
                     ExecutablePath = Path.Combine(chromePath, "chrome2.exe"),
                     Timeout = 15000
                 };
-               
+
                 for (int i = 0; i < list.Count(); i++)
                 {
                     Console.WriteLine($"线程运行状态：{Thread.CurrentThread.IsAlive}");
-                    Thread.Sleep(200);
+                    await Task.Delay(1500);
                     int j = i + 1;
                     try
                     {
@@ -103,6 +103,15 @@ namespace 地磅读取
 
         private async void button2_Click(object sender, EventArgs e)
         {
+            //Process[] ps = Process.GetProcesses();
+            //foreach (Process p in ps)
+            //{
+            //    if (p.ProcessName.ToLower().Contains($"chrome2") || p.ProcessName.ToLower().Contains($"chrome2"))//判断进程名称
+            //    {
+            //        p.Kill();//停止进程
+            //    }
+            //}
+
             string chromePath = Path.Combine(AppContext.BaseDirectory, ".local-chromium", "Win64-970485", "chrome-win");
             // 如果不存在chrome就下载一个
             if (!Directory.Exists(chromePath))
@@ -145,9 +154,6 @@ namespace 地磅读取
                         //var review = await page.EvaluateExpressionAsync(reviews);
                         //Console.WriteLine(review);
                     }
-                    //var a= await page.EvaluateFunctionAsync<int>($@"() => {{
-                    //    return $('#{this.textBox2.Text}').length;
-                    // }}");
 
                     await page.WaitForTimeoutAsync(1500);
                     if (result != null && result.Status == System.Net.HttpStatusCode.OK)
