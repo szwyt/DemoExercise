@@ -53,7 +53,7 @@ namespace 地磅读取
                 for (int i = 0; i < list.Count(); i++)
                 {
                     Console.WriteLine($"线程运行状态：{Thread.CurrentThread.IsAlive}");
-                    Thread.Sleep(1000);
+                    Thread.Sleep(500);
                     int j = i + 1;
                     try
                     {
