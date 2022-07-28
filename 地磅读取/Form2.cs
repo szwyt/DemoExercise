@@ -26,7 +26,7 @@ namespace 地磅读取
         {
             thread?.Abort();
 
-            thread = new Thread(new ThreadStart(async () =>
+            thread = new Thread(async () =>
             {
                 string chromePath = Path.Combine(AppContext.BaseDirectory, ".local-chromium", "Win64-970485", "chrome-win");
                 // 如果不存在chrome就下载一个
@@ -36,13 +36,13 @@ namespace 地磅读取
                     {
                         await browserFetcher.DownloadAsync();
                     };
-
                 }
 
                 var list = File.ReadAllLines($"{Path.Combine(AppContext.BaseDirectory, "siteurl.txt")}");
                 int success = 1;
                 int error = 1;
                 int noimage = 1;
+
                 var launch = new LaunchOptions
                 {
                     Headless = true,
@@ -53,7 +53,7 @@ namespace 地磅读取
                 for (int i = 0; i < list.Count(); i++)
                 {
                     Console.WriteLine($"线程运行状态：{Thread.CurrentThread.IsAlive}");
-                    Thread.Sleep(500);
+                    Thread.Sleep(200);
                     int j = i + 1;
                     try
                     {
@@ -75,6 +75,7 @@ namespace 地磅读取
                                 {
                                     string fileName = $"Files/{j}.Png";
                                     string outputFile = $"{AppContext.BaseDirectory}/{fileName}";
+
                                     await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
                                     {
                                         Type = ScreenshotType.Png,
@@ -82,32 +83,6 @@ namespace 地磅读取
                                     });
 
                                     Console.WriteLine($"第{j}条数据------->{DateTime.Now}------->{outputFile}------->成功数：{success++}");
-
-                                    ////第2种
-                                    //using (var stream = await page.ScreenshotStreamAsync(new ScreenshotOptions { FullPage = false }))
-                                    //{
-
-                                    //    byte[] srcBuf = new Byte[stream.Length];
-                                    //    stream.Read(srcBuf, 0, srcBuf.Length);
-                                    //    stream.Seek(0, SeekOrigin.Begin);
-                                    //    using (FileStream fs = new FileStream($"{outputFile}", FileMode.Create, FileAccess.Write))
-                                    //    {
-                                    //        fs.Write(srcBuf, 0, srcBuf.Length);
-                                    //    }
-                                    //}
-
-                                    //第3种
-                                    //var buffer = await page.ScreenshotDataAsync(new ScreenshotOptions { Type = ScreenshotType.Png, FullPage = true });
-                                    //if (buffer.Length < 20 * 1024)
-                                    //{
-                                    //    using (FileStream fs = new FileStream($"{outputFile}", FileMode.Create, FileAccess.Write))
-                                    //    {
-                                    //        fs.Write(buffer, 0, buffer.Length);
-                                    //    }
-                                    //    Console.WriteLine($"{j}----------------->{DateTime.Now}----------------->" + outputFile);
-                                    //}
-                                    //else
-                                    //    Console.WriteLine($"{j}----------------->{DateTime.Now}----------------->" + "buffer is big data");
                                 }
                                 else
                                 {
@@ -121,8 +96,7 @@ namespace 地磅读取
                         Console.WriteLine($"第{j}条数据------->{DateTime.Now}------->error:{ex.Message}------->异常数：{error++}");
                     }
                 }
-
-            }));
+            });
             thread.IsBackground = true;
             thread.Start();
         }
@@ -143,8 +117,9 @@ namespace 地磅读取
             var launch = new LaunchOptions
             {
                 Headless = true,
-                ExecutablePath = Path.Combine(chromePath, "chrome.exe")
+                ExecutablePath = Path.Combine(chromePath, "chrome2.exe")
             };
+
             using (var browser = await Puppeteer.LaunchAsync(launch))
             {
                 using (var page = await browser.NewPageAsync())
@@ -157,14 +132,14 @@ namespace 地磅读取
                         Height = 1080,
                     });
 
-                    var result = await page.GoToAsync($"{this.textBox1.Text}");
+                    var result = await page.GoToAsync($"{this.textURL.Text}");
                     //li#ch_xxgg
-                    if (!string.IsNullOrWhiteSpace(this.textBox2.Text))
+                    if (!string.IsNullOrWhiteSpace(this.textScripts.Text))
                     {
                         //await page.ClickAsync($"{this.textBox2.Text}");
 
                         //var clickReviews = "document.querySelectorAll('span.title-s')[2].click();";
-                        await page.EvaluateExpressionAsync($"{this.textBox2.Text}");
+                        await page.EvaluateExpressionAsync($"{this.textScripts.Text}");
 
                         //var reviews = "Array.from(document.querySelectorAll('.comments-content'));";
                         //var review = await page.EvaluateExpressionAsync(reviews);
@@ -184,6 +159,10 @@ namespace 地磅读取
                             Type = ScreenshotType.Png,
                             FullPage = true,
                         });
+
+                        PreviewForm previewForm = new PreviewForm();
+                        previewForm.LoadImage?.Invoke(outputFile);
+                        previewForm.Show();
                     }
                 }
             }
