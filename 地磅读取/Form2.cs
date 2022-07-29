@@ -46,14 +46,14 @@ namespace 地磅读取
                 var launch = new LaunchOptions
                 {
                     Headless = true,
-                    ExecutablePath = Path.Combine(chromePath, "chrome2.exe"),
+                    ExecutablePath = Path.Combine(chromePath, "chrome.exe"),
                     Timeout = 15000
                 };
 
                 for (int i = 0; i < list.Count(); i++)
                 {
                     Console.WriteLine($"线程运行状态：{Thread.CurrentThread.IsAlive}");
-                    await Task.Delay(1500);
+                    await Task.Delay(500);
                     int j = i + 1;
                     try
                     {
@@ -126,7 +126,7 @@ namespace 地磅读取
             var launch = new LaunchOptions
             {
                 Headless = true,
-                ExecutablePath = Path.Combine(chromePath, "chrome2.exe")
+                ExecutablePath = Path.Combine(chromePath, "chrome.exe")
             };
 
             using (var browser = await Puppeteer.LaunchAsync(launch))
