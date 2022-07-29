@@ -59,15 +59,20 @@ namespace 地磅读取
                     {
                         using (var browser = await Puppeteer.LaunchAsync(launch))
                         {
-                            using (var page = await browser.NewPageAsync())
+                            var browserContext = await browser.CreateIncognitoBrowserContextAsync();
+                            using (var page = await browserContext.NewPageAsync())
                             {
-                                await page.SetViewportAsync(new ViewPortOptions
-                                {
-                                    Width = 1920,
-                                    Height = 1080,
-                                });
                                 var item = list[i];
-                                var result = await page.GoToAsync($"{item}");
+                                var result = await page.GoToAsync($"{item}", new NavigationOptions
+                                {
+                                    WaitUntil = new[]
+                                    {
+                                        WaitUntilNavigation.DOMContentLoaded,
+                                        WaitUntilNavigation.Load,
+                                        WaitUntilNavigation.Networkidle0,
+                                        WaitUntilNavigation.Networkidle2
+                                    }
+                                });
 
                                 await page.WaitForTimeoutAsync(1000);
 
@@ -89,6 +94,8 @@ namespace 地磅读取
                                     Console.WriteLine($"第{j}条数据------->{DateTime.Now}------->no generate image------->noimages数：{noimage++}");
                                 }
                             }
+
+                            await browserContext.CloseAsync();
                         }
                     }
                     catch (Exception ex)
@@ -126,51 +133,63 @@ namespace 地磅读取
             var launch = new LaunchOptions
             {
                 Headless = true,
-                ExecutablePath = Path.Combine(chromePath, "chrome.exe")
+                ExecutablePath = Path.Combine(chromePath, "chrome.exe"),
             };
 
-            using (var browser = await Puppeteer.LaunchAsync(launch))
+            try
             {
-                using (var page = await browser.NewPageAsync())
+                using (var browser = await Puppeteer.LaunchAsync(launch))
                 {
-                    //await page.AddScriptTagAsync("https://code.jquery.com/jquery-3.2.1.min.Js")
-                    //    .ContinueWith(_ => Task.CompletedTask);
-                    await page.SetViewportAsync(new ViewPortOptions
+                    var browserContext = await browser.CreateIncognitoBrowserContextAsync();
+
+                    using (var page = await browserContext.NewPageAsync())
                     {
-                        Width = 1920,
-                        Height = 1080,
-                    });
-
-                    var result = await page.GoToAsync($"{this.textURL.Text}");
-                    //li#ch_xxgg
-                    if (!string.IsNullOrWhiteSpace(this.textScripts.Text))
-                    {
-                        //await page.ClickAsync($"{this.textBox2.Text}");
-
-                        //var clickReviews = "document.querySelectorAll('span.title-s')[2].click();";
-                        await page.EvaluateExpressionAsync($"{this.textScripts.Text}");
-
-                        //var reviews = "Array.from(document.querySelectorAll('.comments-content'));";
-                        //var review = await page.EvaluateExpressionAsync(reviews);
-                        //Console.WriteLine(review);
-                    }
-
-                    await page.WaitForTimeoutAsync(1500);
-                    if (result != null && result.Status == System.Net.HttpStatusCode.OK)
-                    {
-                        string fileName = $"Files/{DateTime.Now.ToString("yyyyMMddHHmmss")}.Png";
-                        string outputFile = $"{AppContext.BaseDirectory}/{fileName}";
-                        await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
+                        await page.SetViewportAsync(new ViewPortOptions
                         {
-                            Type = ScreenshotType.Png,
-                            FullPage = true,
+                            Width = 1920,
+                            Height = 1080,
                         });
 
-                        PreviewForm previewForm = new PreviewForm();
-                        previewForm.LoadImage?.Invoke(outputFile);
-                        previewForm.Show();
+                        var result = await page.GoToAsync($"{this.textURL.Text}", new NavigationOptions
+                        {
+                            WaitUntil = new[]
+                               {
+                                    WaitUntilNavigation.DOMContentLoaded,
+                                    WaitUntilNavigation.Load,
+                                    WaitUntilNavigation.Networkidle0,
+                                    WaitUntilNavigation.Networkidle2
+                                }
+                        });
+
+                        if (!string.IsNullOrWhiteSpace(this.textScripts.Text))
+                        {
+                            await page.EvaluateExpressionAsync($"{this.textScripts.Text}");
+                        }
+
+                        await page.WaitForTimeoutAsync(1500);
+                        var buffer = result.BufferAsync();
+                        if (result != null && result.Status == System.Net.HttpStatusCode.OK)
+                        {
+                            string fileName = $"Files/{DateTime.Now.ToString("yyyyMMddHHmmss")}.Png";
+                            string outputFile = $"{AppContext.BaseDirectory}/{fileName}";
+
+                            await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
+                            {
+                                Type = ScreenshotType.Png,
+                                FullPage = true,
+                            });
+
+                            PreviewForm previewForm = new PreviewForm();
+                            previewForm.LoadImage?.Invoke(outputFile);
+                            previewForm.Show();
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
             }
         }
     }
