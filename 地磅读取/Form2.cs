@@ -52,9 +52,10 @@ namespace 地磅读取
 
                 for (int i = 0; i < list.Count(); i++)
                 {
-                    Console.WriteLine($"线程运行状态：{Thread.CurrentThread.IsAlive}");
-                    await Task.Delay(500);
+                    await Task.Delay(100);
+
                     int j = i + 1;
+
                     try
                     {
                         using (var browser = await Puppeteer.LaunchAsync(launch))
@@ -62,7 +63,14 @@ namespace 地磅读取
                             var browserContext = await browser.CreateIncognitoBrowserContextAsync();
                             using (var page = await browserContext.NewPageAsync())
                             {
+                                await page.SetViewportAsync(new ViewPortOptions
+                                {
+                                    Width = 1920,
+                                    Height = 1080,
+                                });
+
                                 var item = list[i];
+
                                 var result = await page.GoToAsync($"{item}", new NavigationOptions
                                 {
                                     WaitUntil = new[]
