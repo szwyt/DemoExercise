@@ -158,6 +158,8 @@ namespace 地磅读取
                             Height = 1080,
                         });
 
+                        Stopwatch stopwatch = new Stopwatch();
+                        stopwatch.Start();//在下一个中间价处理前，启动计时器
                         var result = await page.GoToAsync($"{this.textURL.Text}", new NavigationOptions
                         {
                             WaitUntil = new[]
@@ -175,7 +177,11 @@ namespace 地磅读取
                         }
 
                         await page.WaitForTimeoutAsync(1500);
-                        var buffer = result.BufferAsync();
+
+                        stopwatch.Stop();//所有的中间件处理完后，停止秒表。
+                        Console.WriteLine($@"耗时{stopwatch.ElapsedMilliseconds}ms");
+
+                        //var buffer = result.BufferAsync();
                         if (result != null && result.Status == System.Net.HttpStatusCode.OK)
                         {
                             string fileName = $"Files/{DateTime.Now.ToString("yyyyMMddHHmmss")}.Png";
