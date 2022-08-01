@@ -1,5 +1,6 @@
 ﻿using PuppeteerSharp;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +17,38 @@ namespace 地磅读取
 {
     public partial class Form2 : Form
     {
+        /// <summary>
+        /// 线程总数
+        /// </summary>
+        private int threadNum = 5;
+
+        /// <summary>
+        /// 总数
+        /// </summary>
+        private int totalCount = 0;
+
+        /// <summary>
+        /// 已处理
+        /// </summary>
+        private int index = 0;
+
+        /// <summary>
+        /// 异常数
+        /// </summary>
+        private int error = 0;
+
+        /// <summary>
+        /// 异常数
+        /// </summary>
+        private int success = 0;
+
+        private static object lockobj = new object();//创建一个对象
+
+        /// <summary>
+        /// 队列
+        /// </summary>
+        private ConcurrentQueue<string> queues = new ConcurrentQueue<string>();
+
         private Thread thread;
         public Form2()
         {
@@ -26,92 +59,32 @@ namespace 地磅读取
         {
             thread?.Abort();
 
-            thread = new Thread(async () =>
+            thread = new Thread(() =>
             {
-                string chromePath = Path.Combine(AppContext.BaseDirectory, ".local-chromium", "Win64-970485", "chrome-win");
-                // 如果不存在chrome就下载一个
-                if (!Directory.Exists(chromePath))
-                {
-                    using (var browserFetcher = new BrowserFetcher())
-                    {
-                        await browserFetcher.DownloadAsync();
-                    };
-                }
-
                 var list = File.ReadAllLines($"{Path.Combine(AppContext.BaseDirectory, "siteurl.txt")}");
-                int success = 1;
-                int error = 1;
-                int noimage = 1;
-
-                var launch = new LaunchOptions
+                foreach (var item in list)
                 {
-                    Headless = true,
-                    ExecutablePath = Path.Combine(chromePath, "chrome.exe"),
-                    Timeout = 15000
-                };
-
-                for (int i = 0; i < list.Count(); i++)
-                {
-                    await Task.Delay(100);
-
-                    int j = i + 1;
-
-                    try
-                    {
-                        using (var browser = await Puppeteer.LaunchAsync(launch))
-                        {
-                            var browserContext = await browser.CreateIncognitoBrowserContextAsync();
-                            using (var page = await browserContext.NewPageAsync())
-                            {
-                                await page.SetViewportAsync(new ViewPortOptions
-                                {
-                                    Width = 1920,
-                                    Height = 1080,
-                                });
-
-                                var item = list[i];
-
-                                var result = await page.GoToAsync($"{item}", new NavigationOptions
-                                {
-                                    WaitUntil = new[]
-                                    {
-                                        WaitUntilNavigation.DOMContentLoaded,
-                                        WaitUntilNavigation.Load,
-                                        WaitUntilNavigation.Networkidle0,
-                                        WaitUntilNavigation.Networkidle2
-                                    }
-                                });
-
-                                await page.WaitForTimeoutAsync(1000);
-
-                                if (result != null && result.Status == System.Net.HttpStatusCode.OK)
-                                {
-                                    string fileName = $"Files/{j}.Png";
-                                    string outputFile = $"{AppContext.BaseDirectory}/{fileName}";
-
-                                    await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
-                                    {
-                                        Type = ScreenshotType.Png,
-                                        FullPage = true,
-                                    });
-
-                                    Console.WriteLine($"第{j}条数据------->{DateTime.Now}------->{outputFile}------->成功数：{success++}");
-                                }
-                                else
-                                {
-                                    Console.WriteLine($"第{j}条数据------->{DateTime.Now}------->no generate image------->noimages数：{noimage++}");
-                                }
-                            }
-
-                            await browserContext.CloseAsync();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"第{j}条数据------->{DateTime.Now}------->error:{ex.Message}------->异常数：{error++}");
-                    }
+                    queues.Enqueue(item);
                 }
+                totalCount = list.Count();
+
+                Console.WriteLine("可执行的数据:" + list.Count() + "条");
+
+                List<Task> tasks = new List<Task>();
+                for (int i = 0; i < threadNum; i++)
+                {
+                    var task = Task.Run(async () =>
+                    {
+                        await TaskAsync();
+                    });
+                    tasks.Add(task);
+                }
+                var taskList = Task.Factory.ContinueWhenAll(tasks.ToArray(), (ts) =>
+                {
+                });
+                taskList.Wait();
             });
+
             thread.IsBackground = true;
             thread.Start();
         }
@@ -204,6 +177,94 @@ namespace 地磅读取
             {
 
                 throw ex;
+            }
+        }
+
+        private async Task TaskAsync()
+        {
+            string chromePath = Path.Combine(AppContext.BaseDirectory, ".local-chromium", "Win64-970485", "chrome-win");
+            // 如果不存在chrome就下载一个
+            if (!Directory.Exists(chromePath))
+            {
+                using (var browserFetcher = new BrowserFetcher())
+                {
+                    await browserFetcher.DownloadAsync();
+                };
+            }
+
+            var launch = new LaunchOptions
+            {
+                Headless = true,
+                ExecutablePath = Path.Combine(chromePath, "chrome.exe"),
+                Timeout = 15000
+            };
+
+            while (true)
+            {
+                try
+                {
+                    var currentIndex = Interlocked.Increment(ref index);
+                    var isExit = queues.TryDequeue(out string url);
+                    if (!isExit)
+                    {
+                        continue;
+                    }
+
+                    using (var browser = await Puppeteer.LaunchAsync(launch))
+                    {
+                        var browserContext = await browser.CreateIncognitoBrowserContextAsync();
+                        using (var page = await browserContext.NewPageAsync())
+                        {
+                            await page.SetViewportAsync(new ViewPortOptions
+                            {
+                                Width = 1920,
+                                Height = 1080,
+                            });
+
+                            var result = await page.GoToAsync($"{url}", new NavigationOptions
+                            {
+                                WaitUntil = new[]
+                                {
+                                        WaitUntilNavigation.DOMContentLoaded,
+                                        WaitUntilNavigation.Load,
+                                        WaitUntilNavigation.Networkidle0,
+                                        WaitUntilNavigation.Networkidle2
+                                    }
+                            });
+
+                            await page.WaitForTimeoutAsync(1500);
+
+                            if (result != null && result.Status == System.Net.HttpStatusCode.OK)
+                            {
+                                string fileName = $"Files/{currentIndex}.Png";
+                                string outputFile = $"{AppContext.BaseDirectory}/{fileName}";
+
+                                await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
+                                {
+                                    Type = ScreenshotType.Png,
+                                    FullPage = true,
+                                });
+
+                                lock (lockobj)
+                                {
+                                    success++;
+                                }
+                                Console.WriteLine(string.Format("时间{3}、 共{0}条 当前第{1}条、已处理{2}、成功数：{4}", totalCount, currentIndex, index, DateTime.Now, success));
+                            }
+                            else
+                            {
+                                throw new Exception("异常");
+                            }
+                        }
+
+                        await browserContext.CloseAsync();
+                    }
+                }
+                catch
+                {
+                    error++;
+                    Console.WriteLine(string.Format("时间{1}、 异常数{0}", error, DateTime.Now));
+                }
             }
         }
     }
