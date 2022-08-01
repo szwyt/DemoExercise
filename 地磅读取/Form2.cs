@@ -20,7 +20,7 @@ namespace 地磅读取
         /// <summary>
         /// 线程总数
         /// </summary>
-        private int threadNum = 5;
+        private int threadNum = 10;
 
         /// <summary>
         /// 总数
@@ -260,10 +260,10 @@ namespace 地磅读取
                         await browserContext.CloseAsync();
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
                     error++;
-                    Console.WriteLine(string.Format("时间{1}、 异常数{0}", error, DateTime.Now));
+                    Console.WriteLine(string.Format("时间{1}、 异常数{0}、异常消息：{2}", error, DateTime.Now, ex.Message));
                 }
             }
         }
