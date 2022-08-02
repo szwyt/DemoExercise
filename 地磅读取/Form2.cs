@@ -20,7 +20,7 @@ namespace 地磅读取
         /// <summary>
         /// 线程总数
         /// </summary>
-        private int threadNum = 5;
+        private int threadNum = 3;
 
         /// <summary>
         /// 总数
@@ -38,7 +38,7 @@ namespace 地磅读取
         private int error = 0;
 
         /// <summary>
-        /// 异常数
+        /// 成功数
         /// </summary>
         private int success = 0;
 
@@ -81,6 +81,7 @@ namespace 地磅读取
                 }
                 var taskList = Task.Factory.ContinueWhenAll(tasks.ToArray(), (ts) =>
                 {
+
                 });
                 taskList.Wait();
             });

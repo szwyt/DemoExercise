@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -76,7 +77,7 @@ namespace 并发
         /*执行集合数据添加操作*/
 
         /*执行集合数据添加操作*/
-
+        [MethodImpl(MethodImplOptions.Synchronized)]
         private static void AddProducts()
         {
             Parallel.For(0, 30000, (i) =>
