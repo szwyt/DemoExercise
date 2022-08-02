@@ -40,7 +40,7 @@ namespace 地磅读取
         /// <summary>
         /// 异常数
         /// </summary>
-        private int success = 0;
+        private int countSum = 0;
 
         private static object lockobj = new object();//创建一个对象
 
@@ -203,7 +203,11 @@ namespace 地磅读取
             {
                 try
                 {
-                    var currentIndex = Interlocked.Increment(ref index);
+                    var count = Interlocked.Increment(ref index);
+                    if (count == totalCount)
+                    {
+                        Console.WriteLine($"执行完成");
+                    }
                     var isExit = queues.TryDequeue(out string url);
                     if (!isExit)
                     {
@@ -236,6 +240,7 @@ namespace 地磅读取
 
                             if (result != null && result.Status == System.Net.HttpStatusCode.OK)
                             {
+                                var currentIndex = Interlocked.Increment(ref index);
                                 string fileName = $"Files/{currentIndex}.Png";
                                 string outputFile = $"{AppContext.BaseDirectory}/{fileName}";
 
@@ -245,11 +250,7 @@ namespace 地磅读取
                                     FullPage = true,
                                 });
 
-                                lock (lockobj)
-                                {
-                                    success++;
-                                }
-                                Console.WriteLine(string.Format("时间{3}、 共{0}条 当前第{1}条、已处理{2}、成功数：{4}", totalCount, currentIndex, index, DateTime.Now, success));
+                                Console.WriteLine(string.Format("时间{2}、 共{0}条、 已处理{1}", totalCount, currentIndex, DateTime.Now));
                             }
                             else
                             {
@@ -262,8 +263,8 @@ namespace 地磅读取
                 }
                 catch (Exception ex)
                 {
-                    error++;
-                    Console.WriteLine(string.Format("时间{1}、 异常数{0}、异常消息：{2}", error, DateTime.Now, ex.Message));
+                    var errorIndex = Interlocked.Increment(ref index);
+                    Console.WriteLine(string.Format("时间{1}、 异常数{0}、异常消息：{2}", errorIndex, DateTime.Now, ex.Message));
                 }
             }
         }
