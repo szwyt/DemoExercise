@@ -204,7 +204,7 @@ namespace 地磅读取
             {
                 try
                 {
-                    var count = Interlocked.Increment(ref index);
+                    var count = Interlocked.Increment(ref countSum);
                     if (count == totalCount)
                     {
                         Console.WriteLine($"执行完成");
@@ -264,7 +264,7 @@ namespace 地磅读取
                 }
                 catch (Exception ex)
                 {
-                    var errorIndex = Interlocked.Increment(ref index);
+                    var errorIndex = Interlocked.Increment(ref error);
                     Console.WriteLine(string.Format("时间{1}、 异常数{0}、异常消息：{2}", errorIndex, DateTime.Now, ex.Message));
                 }
             }
