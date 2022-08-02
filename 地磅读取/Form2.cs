@@ -261,10 +261,10 @@ namespace 地磅读取
                         await browserContext.CloseAsync();
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
                     error++;
-                    Console.WriteLine(string.Format("时间{1}、 异常数{0}", error, DateTime.Now));
+                    Console.WriteLine(string.Format("时间{1}、 异常数{0}、异常消息：{2}", error, DateTime.Now, ex.Message));
                 }
             }
         }
