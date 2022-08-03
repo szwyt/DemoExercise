@@ -40,6 +40,7 @@ namespace 多线程
             //开启一个task执行任务
             Task task1 = new Task(() =>
             {
+                Console.WriteLine($"线程{source.IsCancellationRequested}");
                 while (!source.IsCancellationRequested)
                 {
                     Thread.Sleep(1000);
