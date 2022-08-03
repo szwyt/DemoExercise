@@ -20,7 +20,7 @@ namespace 地磅读取
         /// <summary>
         /// 线程总数
         /// </summary>
-        private int threadNum = 3;
+        private int threadNum = 10;
 
         /// <summary>
         /// 总数
@@ -43,7 +43,7 @@ namespace 地磅读取
         private int countSum = 0;
 
         private static object lockobj = new object();//创建一个对象
-
+        private CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
         /// <summary>
         /// 队列
         /// </summary>
@@ -200,14 +200,15 @@ namespace 地磅读取
                 Timeout = 15000
             };
 
-            while (true)
+            while (!cancelTokenSource.IsCancellationRequested)
             {
                 try
                 {
                     var count = Interlocked.Increment(ref countSum);
-                    if (count == totalCount)
+                    if (count == 100)
                     {
                         Console.WriteLine($"执行完成");
+                        cancelTokenSource.Cancel();
                     }
                     var isExit = queues.TryDequeue(out string url);
                     if (!isExit)
