@@ -20,7 +20,7 @@ namespace 地磅读取
         /// <summary>
         /// 线程总数
         /// </summary>
-        private int threadNum = 3;
+        private int threadNum = 10;
 
         /// <summary>
         /// 总数
