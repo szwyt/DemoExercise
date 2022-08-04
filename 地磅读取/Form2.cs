@@ -41,8 +41,9 @@ namespace 地磅读取
         /// 成功数
         /// </summary>
         private int countSum = 0;
-
-        private static object lockobj = new object();//创建一个对象
+        /// <summary>
+        /// 取消任务
+        /// </summary>
         private CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
         /// <summary>
         /// 队列
@@ -205,7 +206,7 @@ namespace 地磅读取
                 try
                 {
                     var count = Interlocked.Increment(ref countSum);
-                    if (count == 100)
+                    if (countSum >= totalCount)
                     {
                         Console.WriteLine($"执行完成");
                         cancelTokenSource.Cancel();
@@ -235,7 +236,7 @@ namespace 地磅读取
                                         WaitUntilNavigation.Load,
                                         WaitUntilNavigation.Networkidle0,
                                         WaitUntilNavigation.Networkidle2
-                                    }
+                                }
                             });
 
                             await page.WaitForTimeoutAsync(1500);
@@ -252,7 +253,7 @@ namespace 地磅读取
                                     FullPage = true,
                                 });
 
-                                Console.WriteLine(string.Format("时间{2}、 共{0}条、 已处理{1}", totalCount, currentIndex, DateTime.Now));
+                                Console.WriteLine($"时间：{DateTime.Now}、 共：{totalCount}条、 已处理：{index}");
                             }
                             else
                             {
@@ -266,7 +267,7 @@ namespace 地磅读取
                 catch (Exception ex)
                 {
                     var errorIndex = Interlocked.Increment(ref error);
-                    Console.WriteLine(string.Format("时间{1}、 异常数{0}、异常消息：{2}", errorIndex, DateTime.Now, ex.Message));
+                    Console.WriteLine($"时间：{ DateTime.Now}、 异常数：{errorIndex}、异常消息：{ex.Message}");
                 }
             }
         }
