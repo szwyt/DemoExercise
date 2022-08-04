@@ -44,6 +44,7 @@ namespace 地磅读取
 
         private static object lockobj = new object();//创建一个对象
 
+        private CancellationTokenSource tokenSource = new CancellationTokenSource();
         /// <summary>
         /// 队列
         /// </summary>
@@ -199,7 +200,7 @@ namespace 地磅读取
                 Timeout = 15000
             };
 
-            while (true)
+            while (!tokenSource.IsCancellationRequested)
             {
                 try
                 {
@@ -208,6 +209,10 @@ namespace 地磅读取
                     if (!isExit)
                     {
                         continue;
+                    }
+                    if (currentIndex >= totalCount) 
+                    {
+                        tokenSource.Cancel();
                     }
 
                     using (var browser = await Puppeteer.LaunchAsync(launch))
