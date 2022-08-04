@@ -38,9 +38,14 @@ namespace 地磅读取
         private int error = 0;
 
         /// <summary>
-        /// 成功数
+        /// 
         /// </summary>
         private int countSum = 0;
+
+        /// <summary>
+        /// 成功数
+        /// </summary>
+        private int success = 0;
         /// <summary>
         /// 取消任务
         /// </summary>
@@ -243,8 +248,8 @@ namespace 地磅读取
 
                             if (result != null && result.Status == System.Net.HttpStatusCode.OK)
                             {
-                                var currentIndex = Interlocked.Increment(ref index);
-                                string fileName = $"Files/{currentIndex}.Png";
+                                success++;
+                                string fileName = $"Files/{success}.Png";
                                 string outputFile = $"{AppContext.BaseDirectory}/{fileName}";
 
                                 await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
@@ -253,7 +258,7 @@ namespace 地磅读取
                                     FullPage = true,
                                 });
 
-                                Console.WriteLine($"时间：{DateTime.Now}、 共：{totalCount}条、 已处理：{currentIndex}");
+                                Console.WriteLine($"时间：{DateTime.Now}、 共：{totalCount}条、 已处理：{count}");
                             }
                             else
                             {
@@ -266,8 +271,8 @@ namespace 地磅读取
                 }
                 catch (Exception ex)
                 {
-                    var errorIndex = Interlocked.Increment(ref error);
-                    Console.WriteLine($"时间：{ DateTime.Now}、 异常数：{errorIndex}、异常消息：{ex.Message}");
+                    error++;
+                    Console.WriteLine($"时间：{DateTime.Now}、 异常数：{error}、异常消息：{ex.Message}");
                 }
             }
         }
