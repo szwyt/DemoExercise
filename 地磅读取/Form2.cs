@@ -20,7 +20,7 @@ namespace 地磅读取
         /// <summary>
         /// 线程总数
         /// </summary>
-        private int threadNum = 10;
+        private int threadNum = 20;
 
         /// <summary>
         /// 总数
@@ -205,7 +205,7 @@ namespace 地磅读取
                 try
                 {
                     var count = Interlocked.Increment(ref countSum);
-                    if (count == 100)
+                    if (count == totalCount)
                     {
                         Console.WriteLine($"执行完成");
                         cancelTokenSource.Cancel();
