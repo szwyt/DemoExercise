@@ -206,7 +206,7 @@ namespace 地磅读取
                 try
                 {
                     var count = Interlocked.Increment(ref countSum);
-                    if (countSum >= totalCount)
+                    if (count >= totalCount)
                     {
                         Console.WriteLine($"执行完成");
                         cancelTokenSource.Cancel();
@@ -253,7 +253,7 @@ namespace 地磅读取
                                     FullPage = true,
                                 });
 
-                                Console.WriteLine($"时间：{DateTime.Now}、 共：{totalCount}条、 已处理：{index}");
+                                Console.WriteLine($"时间：{DateTime.Now}、 共：{totalCount}条、 已处理：{currentIndex}");
                             }
                             else
                             {
