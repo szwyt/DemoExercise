@@ -38,11 +38,17 @@ namespace 地磅读取
         private int error = 0;
 
         /// <summary>
-        /// 成功数
+        /// 
         /// </summary>
         private int countSum = 0;
 
-        private static object lockobj = new object();//创建一个对象
+        /// <summary>
+        /// 成功数
+        /// </summary>
+        private int success = 0;
+        /// <summary>
+        /// 取消任务
+        /// </summary>
         private CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
         /// <summary>
         /// 队列
@@ -205,7 +211,7 @@ namespace 地磅读取
                 try
                 {
                     var count = Interlocked.Increment(ref countSum);
-                    if (count == totalCount)
+                    if (count >= totalCount)
                     {
                         Console.WriteLine($"执行完成");
                         cancelTokenSource.Cancel();
@@ -235,15 +241,15 @@ namespace 地磅读取
                                         WaitUntilNavigation.Load,
                                         WaitUntilNavigation.Networkidle0,
                                         WaitUntilNavigation.Networkidle2
-                                    }
+                                }
                             });
 
                             await page.WaitForTimeoutAsync(1500);
 
                             if (result != null && result.Status == System.Net.HttpStatusCode.OK)
                             {
-                                var currentIndex = Interlocked.Increment(ref index);
-                                string fileName = $"Files/{currentIndex}.Png";
+                                success++;
+                                string fileName = $"Files/{success}.Png";
                                 string outputFile = $"{AppContext.BaseDirectory}/{fileName}";
 
                                 await page.ScreenshotAsync($"{outputFile}", new ScreenshotOptions()
@@ -252,21 +258,20 @@ namespace 地磅读取
                                     FullPage = true,
                                 });
 
-                                Console.WriteLine(string.Format("时间{2}、 共{0}条、 已处理{1}", totalCount, currentIndex, DateTime.Now));
+                                Console.WriteLine($"时间：{DateTime.Now}、 共：{totalCount}条、 已处理：{count}");
                             }
                             else
                             {
                                 throw new Exception("异常");
                             }
                         }
-
                         await browserContext.CloseAsync();
                     }
                 }
                 catch (Exception ex)
                 {
-                    var errorIndex = Interlocked.Increment(ref error);
-                    Console.WriteLine(string.Format("时间{1}、 异常数{0}、异常消息：{2}", errorIndex, DateTime.Now, ex.Message));
+                    error++;
+                    Console.WriteLine($"时间：{DateTime.Now}、 异常数：{error}、异常消息：{ex.Message}");
                 }
             }
         }
